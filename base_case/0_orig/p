@@ -9,22 +9,22 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    location    "constant";
-    object      radiationProperties;
+    class       volScalarField;
+    object      p;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-radiation       off;
+dimensions      [1 -1 -2 0 0 0 0];
 
-radiationModel  none;
+internalField   uniform 1e5;
 
-absorptionEmissionModel none;
-
-scatterModel    none;
-
-sootModel       none;
-
-transmissivityModel none;
+boundaryField
+{
+    ".*"
+    {
+        type            calculated;
+        value           uniform 1e5;
+    }
+}
 
 // ************************************************************************* //

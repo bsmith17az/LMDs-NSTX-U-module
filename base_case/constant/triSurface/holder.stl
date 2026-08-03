@@ -1,0 +1,96 @@
+solid holder_bottom
+  facet normal  -0.000000e+00  0.000000e+00 -1.000000e+00
+    outer loop
+      vertex  8.881785e-18  3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.900000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.900000e-02
+    endloop
+  endfacet
+  facet normal  0.000000e+00  0.000000e+00 -1.000000e+00
+    outer loop
+      vertex  0.000000e+00 -3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02 -3.000000e-02 -2.900000e-02
+    endloop
+  endfacet
+endsolid holder_bottom
+
+solid holder_module_interface
+  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
+    outer loop
+      vertex  8.881785e-18  3.000000e-02 -2.500000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.500000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
+    outer loop
+      vertex  2.599000e-02  3.000000e-02 -2.500000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.500000e-02
+      vertex  2.599000e-02 -3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+endsolid holder_module_interface
+
+solid holder_symmetry
+  facet normal -1.000000e+00  1.480297e-16  0.000000e+00
+    outer loop
+      vertex  8.881785e-18  3.000000e-02 -2.900000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.900000e-02
+      vertex  8.881785e-18  3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal -1.000000e+00  1.480297e-16  0.000000e+00
+    outer loop
+      vertex  8.881785e-18  3.000000e-02 -2.500000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.900000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+endsolid holder_symmetry
+
+solid holder_walls
+  facet normal  0.000000e+00 -1.000000e+00  0.000000e+00
+    outer loop
+      vertex  0.000000e+00 -3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02 -3.000000e-02 -2.900000e-02
+      vertex  0.000000e+00 -3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal  0.000000e+00 -1.000000e+00  0.000000e+00
+    outer loop
+      vertex  0.000000e+00 -3.000000e-02 -2.500000e-02
+      vertex  2.599000e-02 -3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02 -3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal  1.000000e+00  0.000000e+00  0.000000e+00
+    outer loop
+      vertex  2.599000e-02 -3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02 -3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal  1.000000e+00  -0.000000e+00  0.000000e+00
+    outer loop
+      vertex  2.599000e-02 -3.000000e-02 -2.500000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal  0.000000e+00  1.000000e+00  0.000000e+00
+    outer loop
+      vertex  2.599000e-02  3.000000e-02 -2.900000e-02
+      vertex  8.881785e-18  3.000000e-02 -2.900000e-02
+      vertex  2.599000e-02  3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+  facet normal  0.000000e+00  1.000000e+00  0.000000e+00
+    outer loop
+      vertex  2.599000e-02  3.000000e-02 -2.500000e-02
+      vertex  8.881785e-18  3.000000e-02 -2.900000e-02
+      vertex  8.881785e-18  3.000000e-02 -2.500000e-02
+    endloop
+  endfacet
+endsolid holder_walls
+

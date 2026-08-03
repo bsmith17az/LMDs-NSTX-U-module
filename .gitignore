@@ -1,2 +1,4 @@
 *.foam
 log.*
+*.stl
+*/constant/polyMesh/*

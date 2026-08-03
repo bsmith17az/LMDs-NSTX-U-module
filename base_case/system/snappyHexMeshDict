@@ -127,7 +127,106 @@ castellatedMeshControls
             }
         }
 */
+    holder
+    {
+        level (0 0);
+        regions
+        {
+            holder_walls
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    wall;
+                }
+            }
+            holder_bottom
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    wall;
+                }
+            }
+            holder_symmetry
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    symmetryPlane;
+                }
+            }
+            holder_module_interface
+            {
+                level (0 0);
+                faceType    internal;
+            }
+        }
     }
+    module
+    {
+        level (0 0);
+
+        regions
+        {
+            module_walls 
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    wall;
+                }
+            }  
+            module_holder_interface
+            {
+                level       (0 0);
+                faceType    internal;
+            }
+            module_lm_interface
+            {
+                level (0 0);
+                faceType    internal;
+            }
+            module_symmetry
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    symmetryPlane;
+                }
+            }
+        }
+    }
+    lm_cps
+    {
+        level (0 0);
+
+        regions
+        {
+            lm_external
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    wall;
+                }
+            }
+            lm_module_interface
+            {
+                level (0 0);
+                faceType    internal;
+            }
+            lm_symmetry
+            {
+                level (0 0);
+                patchInfo
+                {
+                    type    symmetryPlane;
+                }
+            }
+        }
+    }
+}
     
     // Resolve sharp angles
     resolveFeatureAngle 30;

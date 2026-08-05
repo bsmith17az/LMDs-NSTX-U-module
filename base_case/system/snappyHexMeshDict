@@ -44,189 +44,118 @@ geometry
 castellatedMeshControls
 {
     maxLocalCells 10000;
-    maxGlobalCells 200000;
+    maxGlobalCells 2000000;
     minRefinementCells 0;
     maxLoadUnbalance 0.10;
     nCellsBetweenLevels 2;
 
     features
     (
-        
     );
 
 
     refinementSurfaces
     {
-/*        block1
+        holder
         {
-            level (2 2);
-
-            cellZone block1;
-            cellZoneInside inside;
-
+            level (0 0);
             regions
             {
+                walls
+                {
+                    level (0 0);
+                    patchInfo
+                    {
+                        type    wall;
+                    }
+                }
                 bottom
                 {
-                    level (2 2);
+                    level (0 0);
                     patchInfo
                     {
-                        type wall;
+                        type    wall;
                     }
                 }
-
-                walls1
+//                symmetry
+//                {
+//                    level (0 0);
+//                    patchInfo
+//                    {
+//                        type    symmetryPlane;
+//                    }
+//                }
+                module_interface
                 {
-                    level (2 2);
-                    patchInfo
-                    {
-                        type wall;
-                    }
-                }
-
-                interface
-                {
-                    level (2 2);
-                    faceZone interface;
-                    faceType internal;
+                    level (0 0);
+                    faceType    internal;
                 }
             }
         }
-
-        block2
+        module
         {
-            level (2 2);
-
-            cellZone block2;
-            cellZoneInside inside;
+            level (0 0);
 
             regions
             {
-                interface
+                walls 
                 {
-                    level (2 2);
-                }
-
-                walls2
-                {
-                    level (2 2);
+                    level (0 0);
                     patchInfo
                     {
-                        type wall;
+                        type    wall;
                     }
-                }
-
-                top
+                }  
+                holder_interface
                 {
-                    level (2 2);
+                    level       (0 0);
+                    faceType    internal;
+                }
+                lm_interface
+                {
+                    level (0 0);
+                    faceType    internal;
+                }
+//                symmetry
+//                {
+//                    level (0 0);
+//                    patchInfo
+//                    {
+//                        type    symmetryPlane;
+//                    }
+//                }
+            }
+        }
+        lm_cps
+        {
+            level (0 0);
+
+            regions
+            {
+                external
+                {
+                    level (0 0);
                     patchInfo
                     {
-                        type wall;
+                        type    wall;
                     }
                 }
-            }
-        }
-*/
-    holder
-    {
-        level (0 0);
-        regions
-        {
-            holder_walls
-            {
-                level (0 0);
-                patchInfo
+                module_interface
                 {
-                    type    wall;
+                    level (0 0);
+                    faceType    internal;
                 }
-            }
-            holder_bottom
-            {
-                level (0 0);
-                patchInfo
-                {
-                    type    wall;
-                }
-            }
-            holder_symmetry
-            {
-                level (0 0);
-                patchInfo
-                {
-                    type    symmetryPlane;
-                }
-            }
-            holder_module_interface
-            {
-                level (0 0);
-                faceType    internal;
+//                symmetry
+//                {
+//                    level (0 0);
+//                    patchInfo
+//                    {
+//                        type    symmetryPlane;
+//                    }
+//                }
             }
         }
     }
-    module
-    {
-        level (0 0);
-
-        regions
-        {
-            module_walls 
-            {
-                level (0 0);
-                patchInfo
-                {
-                    type    wall;
-                }
-            }  
-            module_holder_interface
-            {
-                level       (0 0);
-                faceType    internal;
-            }
-            module_lm_interface
-            {
-                level (0 0);
-                faceType    internal;
-            }
-            module_symmetry
-            {
-                level (0 0);
-                patchInfo
-                {
-                    type    symmetryPlane;
-                }
-            }
-        }
-    }
-    lm_cps
-    {
-        level (0 0);
-
-        regions
-        {
-            lm_external
-            {
-                level (0 0);
-                patchInfo
-                {
-                    type    wall;
-                }
-            }
-            lm_module_interface
-            {
-                level (0 0);
-                faceType    internal;
-            }
-            lm_symmetry
-            {
-                level (0 0);
-                patchInfo
-                {
-                    type    symmetryPlane;
-                }
-            }
-        }
-    }
-}
     
     // Resolve sharp angles
     resolveFeatureAngle 30;
@@ -246,7 +175,7 @@ castellatedMeshControls
         lm_cps
         {
             mode inside;
-            levels ((0 0));
+            levels ((3 3));
         }
     }
 
@@ -257,7 +186,7 @@ castellatedMeshControls
     (
         ((0.001 0 -0.026) holder)
         ((0.001 0 -0.005) module)
-        ((0.001 0 -0.0005) lm_cps)
+        ((0.001 0 -0.0001) lm_cps)
     );
 
 

@@ -16,6 +16,34 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+solvers
+{
+    h
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-8;
+        relTol          0;
+    }
+    hFinal
+    {
+        $h;
+        tolerance       1e-8;
+        relTol          0;
+    }
+}
 
+PIMPLE
+{
+    nNonOrthogonalCorrectors    0;
+}
+
+relaxationFactors
+{
+    equations
+    {
+        h                       1.0;
+    }
+}
 
 // ************************************************************************* //

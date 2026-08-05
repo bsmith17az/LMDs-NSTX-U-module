@@ -16,16 +16,47 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-divSchemes
+ddtSchemes
 {
+    default         Euler;
 }
 
 gradSchemes
 {
+    default         Gauss linear;
+}
+
+divSchemes
+{
+    default         none;
+
+    // Kept for later when you unfreeze the flow
+    div(phi,U)      Gauss linearUpwind grad(U);
+    div(phi,h)      Gauss upwind;
+    div(phi,K)	    Gauss upwind;
+    div(phid,p)     Gauss upwind;
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
 }
 
 laplacianSchemes
 {
+    default         Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+fluxRequired
+{
+    default         no;
+    p_rgh;
 }
 
 

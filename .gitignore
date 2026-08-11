@@ -2,3 +2,4 @@
 log.*
 *.stl
 **/polyMesh/*
+**/constant/cellToRegion

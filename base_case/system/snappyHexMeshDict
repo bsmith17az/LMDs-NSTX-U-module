@@ -77,14 +77,14 @@ castellatedMeshControls
                         type    wall;
                     }
                 }
-//                symmetry
-//                {
-//                    level (0 0);
-//                    patchInfo
-//                    {
-//                        type    symmetryPlane;
-//                    }
-//                }
+                symmetry
+                {
+                    level (0 0);
+                    patchInfo
+                    {
+                        type    symmetry;
+                    }
+                }
                 module_interface
                 {
                     level (0 0);
@@ -116,14 +116,14 @@ castellatedMeshControls
                     level (0 0);
                     faceType    internal;
                 }
-//                symmetry
-//                {
-//                    level (0 0);
-//                    patchInfo
-//                    {
-//                        type    symmetryPlane;
-//                    }
-//                }
+                symmetry
+                {
+                    level (0 0);
+                    patchInfo
+                    {
+                        type    symmetry;
+                    }
+                }
             }
         }
         lm_cps
@@ -145,14 +145,14 @@ castellatedMeshControls
                     level (0 0);
                     faceType    internal;
                 }
-//                symmetry
-//                {
-//                    level (0 0);
-//                    patchInfo
-//                    {
-//                        type    symmetryPlane;
-//                    }
-//                }
+                symmetry
+                {
+                    level (0 0);
+                    patchInfo
+                    {
+                        type    symmetry;
+                    }
+                }
             }
         }
     }

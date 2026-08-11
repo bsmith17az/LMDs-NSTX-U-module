@@ -8,9 +8,10 @@
 FoamFile
 {
     version     2.0;
-    format      ascii;
+    format      binary;
     arch        "LSB;label=32;scalar=64";
     class       volScalarField;
+    location    "0/holder";
     object      cellToRegion;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -27,7 +28,7 @@ boundaryField
     }
     holder_symmetry
     {
-        type            zeroGradient;
+        type            symmetry;
     }
     holder_walls
     {

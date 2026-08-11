@@ -17,14 +17,14 @@ FoamFile
 
 dimensions      [0 0 0 1 0 0 0];
 
-tRef            300;
-internalField   uniform $tRef;
+TRef            300;
+internalField   uniform $TRef;
 
 boundaryField
 {
     module_symmetry
     {
-        type            symmetryPlane;
+        type            symmetry;
     }
     module_walls
     {

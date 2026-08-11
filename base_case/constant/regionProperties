@@ -18,8 +18,7 @@ FoamFile
 regions
 (
     fluid       (lm_cps)
-    solid       (holder)
-    solid       (module)
+    solid       (holder module)
 );
 
 // ************************************************************************* //

@@ -96,9 +96,9 @@ boundaryField
                 / sqrt(2*constant::mathematical::pi*m_li*k_b*Tcell)
                 * (E_vap_li + E_sh_li);
 
-                gradField[faceI] = -qFlux / kappap[faceI];
+                gradField[faceI] = qFlux / kappap[faceI];
                 fracField[faceI] = 0.0;
-                valField[faceI]  = Tcell;   // unused, but keep it sane
+                valField[faceI]  = Tcell;
             }
 
             mixedFvPatchScalarField::updateCoeffs();

@@ -132,6 +132,14 @@ castellatedMeshControls
 
             regions
             {
+                top
+                {
+                    level (0 0);
+                    patchInfo
+                    {
+                        type    wall;
+                    }
+                }
                 external
                 {
                     level (0 0);

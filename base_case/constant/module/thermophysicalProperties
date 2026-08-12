@@ -18,8 +18,8 @@ thermoType
 {
     type            heSolidThermo;
     mixture         pureMixture;
-    transport       constIso;
-    thermo          hConst;
+    transport       polynomial;
+    thermo          hPolynomial;
     equationOfState rhoConst;
     specie          specie;
     energy          sensibleEnthalpy;
@@ -29,23 +29,26 @@ mixture
 {
     specie
     {
-        molWeight   12;
+        molWeight   95.95;
     }
 
     transport
     {
-        kappa   80;
+        // kappa [W/m/K] = 136.68 - 2.7631e-2*T
+        kappaCoeffs<8> (136.68 -2.7631e-2 0 0 0 0 0 0);
     }
 
     thermodynamics
     {
         Hf      0;
-        Cp      450;
+        Sf      0;
+        // Cp [J/kg/K] = 276.2 - 3.1508e-2*T + 3.969e-5*T^2
+        CpCoeffs<8> (276.2 -3.1508e-2 3.969e-5 0 0 0 0 0);
     }
 
     equationOfState
     {
-        rho     8000;
+        rho     10200;
     }
 }
 

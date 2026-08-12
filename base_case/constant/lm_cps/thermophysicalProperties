@@ -20,26 +20,31 @@ thermoType
     mixture         pureMixture;
     transport       const;
     thermo          hConst;
-    equationOfState perfectGas;
+    equationOfState rhoConst;
     specie          specie;
     energy          sensibleEnthalpy;
 }
 
+k                      85;
 mixture
 {
     specie
     {
-        molWeight       28.9;
+        molWeight       6.94;
+    }
+    equationOfState
+    {
+        rho             534;
     }
     thermodynamics
     {
-        Cp              1000;
+        Cp              3580;
         Hf              0;
     }
     transport
     {
-        mu              1.8e-05;
-        Pr              0.7;
+        mu              0.13e-3;
+        Pr              #eval "$mu * ${../thermodynamics/Cp} / $k";
     }
 }
 

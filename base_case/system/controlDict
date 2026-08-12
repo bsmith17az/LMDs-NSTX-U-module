@@ -23,7 +23,7 @@ startTime       0.00;
 
 stopAt          endTime;
 
-endTime         10;
+endTime         10.00;
 
 deltaT          0.01;
 

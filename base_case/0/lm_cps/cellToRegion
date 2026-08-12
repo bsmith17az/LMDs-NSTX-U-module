@@ -30,6 +30,10 @@ boundaryField
     {
         type            symmetry;
     }
+    lm_cps_top
+    {
+        type            zeroGradient;
+    }
     lm_cps_to_module
     {
         type            calculated;

@@ -29,18 +29,18 @@ mixture
 {
     specie
     {
-        molWeight   64;
+        molWeight   64; // Ref: https://webbook.nist.gov/cgi/cbook.cgi?ID=C7440508&Mask=2
     }
 
     transport
     {
-        kappa   395;
+        kappa   395; // Ref: http://hyperphysics.phy-astr.gsu.edu/hbase/Tables/thrcn.html
     }
 
     thermodynamics
     {
         Hf      0;
-        Cp      385;
+        Cp      811; // Ref: https://webbook.nist.gov/cgi/cbook.cgi?ID=C7440508&Mask=2 at 1300K
     }
 
     equationOfState

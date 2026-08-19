@@ -219,7 +219,7 @@ snapControls
     tolerance 1.0; // 1.0;
 
     //- Number of mesh displacement relaxation iterations.
-    nSolveIter 300;
+    nSolveIter 100;
 
     //- Maximum number of snapping relaxation iterations. Should stop
     //  before upon reaching a correct mesh.
@@ -236,7 +236,7 @@ snapControls
         implicitFeatureSnap true;
 
         // Use castellatedMeshControls::features (default = true)
-        explicitFeatureSnap false;
+        explicitFeatureSnap true;
 
         // Detect features between multiple surfaces
         // (only for explicitFeatureSnap, default = false)

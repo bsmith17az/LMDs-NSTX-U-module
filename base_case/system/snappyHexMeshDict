@@ -16,7 +16,7 @@ FoamFile
 
 // Which of the steps to run
 castellatedMesh true;
-snap            false;
+snap            true;
 addLayers       false;
 
 geometry
@@ -183,7 +183,7 @@ castellatedMeshControls
         lm_cps
         {
             mode inside;
-            levels ((3 3));
+            levels ((3 4));
         }
     }
 

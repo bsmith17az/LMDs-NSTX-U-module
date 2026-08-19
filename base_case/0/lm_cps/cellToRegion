@@ -22,7 +22,23 @@ internalField   uniform 2;
 
 boundaryField
 {
+    module_lm_interface
+    {
+        type            zeroGradient;
+    }
+    module_symmetry
+    {
+        type            symmetry;
+    }
+    module_walls
+    {
+        type            zeroGradient;
+    }
     lm_cps_external
+    {
+        type            zeroGradient;
+    }
+    lm_cps_module_interface
     {
         type            zeroGradient;
     }

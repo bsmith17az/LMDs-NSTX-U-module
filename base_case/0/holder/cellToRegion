@@ -26,6 +26,10 @@ boundaryField
     {
         type            zeroGradient;
     }
+    holder_module_interface
+    {
+        type            zeroGradient;
+    }
     holder_symmetry
     {
         type            symmetry;

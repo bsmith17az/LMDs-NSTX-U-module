@@ -25,6 +25,25 @@ geometry
     {
         type triSurfaceMesh;
         file "holder.stl";
+        regions
+        {
+            walls
+            {
+                name    walls;
+            }
+            bottom
+            {
+                name    bottom;
+            }
+            symmetry
+            {
+                name    symmetry;
+            }
+            module_interface
+            {
+                name    module_interface;
+            }
+        }
 
     }
     module
@@ -56,42 +75,7 @@ castellatedMeshControls
 
     refinementSurfaces
     {
-        holder
-        {
-            level (0 0);
-            regions
-            {
-                walls
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }
-                bottom
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }
-                symmetry
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    symmetry;
-                    }
-                }
-                module_interface
-                {
-                    level (0 0);
-                    faceType    internal;
-                }
-            }
-        }
+
         module
         {
             level (0 0);

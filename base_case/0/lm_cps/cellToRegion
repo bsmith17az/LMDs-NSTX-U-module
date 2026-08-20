@@ -22,10 +22,6 @@ internalField   uniform 2;
 
 boundaryField
 {
-    lm_cps_external
-    {
-        type            zeroGradient;
-    }
     lm_cps_symmetry
     {
         type            symmetry;
@@ -35,6 +31,11 @@ boundaryField
         type            zeroGradient;
     }
     lm_cps_to_module
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    lm_cps_to_holder
     {
         type            calculated;
         value           uniform 0;

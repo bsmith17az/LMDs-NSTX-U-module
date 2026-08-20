@@ -22,19 +22,36 @@ internalField   uniform 0;
 
 boundaryField
 {
-    holder_bottom
+    maxY
     {
         type            zeroGradient;
     }
-    holder_symmetry
+    minX
     {
-        type            symmetry;
+        type            symmetryPlane;
     }
-    holder_walls
+    maxX
+    {
+        type            zeroGradient;
+    }
+    minY
+    {
+        type            zeroGradient;
+    }
+    minZ
+    {
+        type            zeroGradient;
+    }
+    maxZ
     {
         type            zeroGradient;
     }
     holder_to_module
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    holder_to_lm_cps
     {
         type            calculated;
         value           uniform 0;

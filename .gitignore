@@ -2,5 +2,5 @@
 log.*
 *.stl
 **/polyMesh/*
-**/constant/cellToRegion
 **/dynamicCode
+**/cellToRegion

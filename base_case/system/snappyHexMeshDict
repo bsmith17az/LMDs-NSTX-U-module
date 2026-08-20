@@ -75,6 +75,10 @@ castellatedMeshControls
 
     refinementSurfaces
     {
+        holder
+        {
+            level (0 0);  
+        }
 
         module
         {

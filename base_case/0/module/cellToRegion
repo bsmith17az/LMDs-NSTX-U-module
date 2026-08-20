@@ -18,15 +18,11 @@ FoamFile
 
 dimensions      [0 0 0 0 0 0 0];
 
-internalField   uniform 1;
+internalField   uniform 0;
 
 boundaryField
 {
     holder_module_interface
-    {
-        type            zeroGradient;
-    }
-    module_holder_interface
     {
         type            zeroGradient;
     }
@@ -42,20 +38,16 @@ boundaryField
     {
         type            zeroGradient;
     }
-    lm_cps_external
-    {
-        type            zeroGradient;
-    }
     lm_cps_module_interface
     {
         type            zeroGradient;
     }
-    module_to_holder
+    module_to_lm_cps
     {
         type            calculated;
         value           uniform 0;
     }
-    module_to_lm_cps
+    module_to_holder
     {
         type            calculated;
         value           uniform 0;

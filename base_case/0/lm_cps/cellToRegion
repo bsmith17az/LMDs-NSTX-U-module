@@ -18,19 +18,11 @@ FoamFile
 
 dimensions      [0 0 0 0 0 0 0];
 
-internalField   uniform 2;
+internalField   uniform 1;
 
 boundaryField
 {
     module_lm_interface
-    {
-        type            zeroGradient;
-    }
-    module_symmetry
-    {
-        type            symmetry;
-    }
-    module_walls
     {
         type            zeroGradient;
     }

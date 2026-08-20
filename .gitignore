@@ -3,4 +3,5 @@ log.*
 *.stl
 **/polyMesh/*
 **/dynamicCode
+/meshes/
 **/cellToRegion

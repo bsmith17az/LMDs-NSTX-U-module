@@ -16,7 +16,7 @@ FoamFile
 
 // Which of the steps to run
 castellatedMesh true;
-snap            false;
+snap            true;
 addLayers       false;
 
 geometry
@@ -204,10 +204,10 @@ snapControls
     //- Relative distance for points to be attracted by surface feature point
     //  or edge. True distance is this factor times local
     //  maximum edge length.
-    tolerance 4.0; // 1.0;
+    tolerance 1.0; // 1.0;
 
     //- Number of mesh displacement relaxation iterations.
-    nSolveIter 300;
+    nSolveIter 100;
 
     //- Maximum number of snapping relaxation iterations. Should stop
     //  before upon reaching a correct mesh.
@@ -228,7 +228,7 @@ snapControls
 
         // Detect features between multiple surfaces
         // (only for explicitFeatureSnap, default = false)
-        multiRegionFeatureSnap true;
+        multiRegionFeatureSnap false;
 }
 
 

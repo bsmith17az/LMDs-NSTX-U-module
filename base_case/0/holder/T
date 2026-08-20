@@ -1,0 +1,85 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2606                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+TRef            300;
+internalField   uniform $TRef;
+
+boundaryField
+{
+    holder_bottom
+    {
+        type            codedMixed;
+        value           uniform $TRef;
+        refValue        uniform 293;
+        refGradient     uniform 0;
+        valueFraction   uniform 0;
+        name            fixedTCircle;
+
+        code
+        #{
+            const scalar r0 = 0.014;   // 14 mm
+
+            const vectorField& Cf = patch().Cf();
+
+            forAll(Cf, faceI)
+            {
+                const scalar x = Cf[faceI].x();
+                const scalar y = Cf[faceI].y();
+
+                const scalar r = Foam::sqrt(sqr(x) + sqr(y));
+
+                if (r <= r0)
+                {
+                    // Fixed temperature
+                    this->refValue()[faceI] = 293.0;
+                    this->valueFraction()[faceI] = 1.0;
+                }
+                else
+                {
+                    // Insulated (zeroGradient)
+                    this->refGrad()[faceI] = 0.0;
+                    this->valueFraction()[faceI] = 0.0;
+                }
+            }
+        #};
+    }
+    holder_symmetry
+    {
+        type            symmetry;
+    }
+    holder_walls
+    {
+        type            externalWallHeatFluxTemperature;
+        mode            coefficient;
+        kappaMethod	    solidThermo;
+        h               uniform 0;
+        Ta              constant $TRef;
+        value		    uniform $TRef;
+    }
+    holder_to_module
+    {
+	    type            compressible::turbulentTemperatureRadCoupledMixed;
+    	kappaMethod	    solidThermo;
+	    Tnbr            T;
+    	value           uniform $TRef;
+    }
+}
+
+
+// ************************************************************************* //

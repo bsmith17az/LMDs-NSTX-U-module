@@ -236,11 +236,11 @@ snapControls
         implicitFeatureSnap true;
 
         // Use castellatedMeshControls::features (default = true)
-        explicitFeatureSnap true;
+        explicitFeatureSnap false;
 
         // Detect features between multiple surfaces
         // (only for explicitFeatureSnap, default = false)
-        multiRegionFeatureSnap true;
+        multiRegionFeatureSnap false;
 }
 
 

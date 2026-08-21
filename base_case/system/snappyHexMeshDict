@@ -25,17 +25,74 @@ geometry
     {
         type triSurfaceMesh;
         file "holder.stl";
+        regions
+        {
+            walls
+            {
+                name    holder_walls;
+            }
+            bottom
+            {
+                name    holder_bottom;
+            }
+            symmetry
+            {
+                name    holder_symmetry;
+            }
+            module_interface
+            {
+                name    holder_module_interface;
+            }
+        }
 
     }
     module
     {
         type triSurfaceMesh;
         file "module.stl";
+        regions
+        {
+            walls
+            {
+                name    module_walls;
+            }
+            holder_interface
+            {
+                name    module_holder_interface;
+            }
+            lm_interface
+            {
+                name    module_lm_interface;
+            }
+            symmetry
+            {
+                name    module_symmetry;
+            }
+        }
     }
     lm_cps
     {
         type triSurfaceMesh;
         file "lm_cps.stl";
+        regions
+        {
+            top
+            {
+                name    lm_cps_top;
+            }
+            external
+            {
+                name    lm_cps_external;
+            }
+            module_interface
+            {
+                name    lm_cps_module_interface;
+            }
+            symmetry
+            {
+                name    lm_cps_symmetry;
+            }
+        }
     }
 }
 
@@ -58,110 +115,15 @@ castellatedMeshControls
     {
         holder
         {
-            level (0 0);
-            regions
-            {
-                walls
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }
-                bottom
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }
-                symmetry
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    symmetry;
-                    }
-                }
-                module_interface
-                {
-                    level (0 0);
-                    faceType    baffle;
-                }
-            }
+            level (0 0);  
         }
         module
         {
             level (0 0);
-
-            regions
-            {
-                walls 
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }  
-                holder_interface
-                {
-                    level       (0 0);
-                    faceType    baffle;
-                }
-                lm_interface
-                {
-                    level (0 0);
-                    faceType    baffle;
-                }
-                symmetry
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    symmetry;
-                    }
-                }
-            }
         }
         lm_cps
         {
             level (0 0);
-
-            regions
-            {
-                top
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }
-                external
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    wall;
-                    }
-                }
-                module_interface
-                {
-                    level (0 0);
-                    faceType    baffle;
-                }
-                symmetry
-                {
-                    level (0 0);
-                    patchInfo
-                    {
-                        type    symmetry;
-                    }
-                }
-            }
         }
     }
     

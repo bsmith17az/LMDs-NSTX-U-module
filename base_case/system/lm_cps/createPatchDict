@@ -28,5 +28,15 @@ patches
         constructFrom patches;
         patches (lm_cps_external lm_cps_module_interface module_lm_interface module_walls);
     }
+    {
+        name lm_cps_symmetry;
+        patchInfo
+        {
+            type symmetry;
+        }
+
+        constructFrom patches;
+        patches (lm_cps_symmetry module_symmetry);
+    }
 );
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

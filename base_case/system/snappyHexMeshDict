@@ -115,15 +115,48 @@ castellatedMeshControls
     {
         holder
         {
-            level (0 0);  
+            level (0 0);
+            regions
+            {
+                symmetry
+                {
+                    level           ( 0 0 );
+                    patchInfo
+                    {
+                        type            symmetry;
+                    }
+                }
+            }  
         }
         module
         {
             level (0 0);
+            regions
+            {
+                symmetry
+                {
+                    level           ( 0 0 );
+                    patchInfo
+                    {
+                        type            symmetry;
+                    }
+                }
+            }
         }
         lm_cps
         {
             level (0 0);
+            regions
+            {
+                symmetry
+                {
+                    level           ( 0 0 );
+                    patchInfo
+                    {
+                        type            symmetry;
+                    }
+                }
+            }
         }
     }
     

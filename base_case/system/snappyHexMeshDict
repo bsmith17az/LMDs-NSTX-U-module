@@ -100,11 +100,11 @@ geometry
 // Settings for the castellatedMesh generation.
 castellatedMeshControls
 {
-    maxLocalCells 10000;
-    maxGlobalCells 2000000;
+    maxLocalCells 20000;
+    maxGlobalCells 4000000;
     minRefinementCells 0;
     maxLoadUnbalance 0.10;
-    nCellsBetweenLevels 2;
+    nCellsBetweenLevels 3;
 
     features
     (
@@ -178,7 +178,7 @@ castellatedMeshControls
         lm_cps
         {
             mode inside;
-            levels ((3 3));
+            levels ((3 4));
         }
     }
 

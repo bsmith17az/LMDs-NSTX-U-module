@@ -1,0 +1,13 @@
+components:
+  - name: holder
+    filename: STLs/v1/holder_v1_64fa9.stl
+    target: constant/triSurface/holder.stl
+    sha256: 64fa960e8dec2d395cdfdf3c61e35042ea0fbb97515ba73a92d98fb621a7e9dc
+  - name: lm_cps
+    filename: STLs/v1/lm_cps_v1_eb5cb.stl
+    target: constant/triSurface/lm_cps.stl
+    sha256: eb5cbfa2eb7fe91ed27148c394dabdc21e18656e0c68c054dfcf5136a0645cc5
+  - name: module
+    filename: STLs/v1/module_v1_ee3ce.stl
+    target: constant/triSurface/module.stl
+    sha256: ee3ce79a8ceb8a4c0e20e049d30e47f090618d61f82b2d12a0ff39f34d2f7dd9

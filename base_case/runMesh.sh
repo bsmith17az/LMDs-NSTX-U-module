@@ -1,4 +1,5 @@
 #!/bin/bash
+python3 -c "from assets import validate_assets; validate_assets()"
 
 set -eou pipefail
 NPROCS=$(foamDictionary constant/sys_params -entry NPROCS -value)

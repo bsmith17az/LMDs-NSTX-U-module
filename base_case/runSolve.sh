@@ -1,2 +1,2 @@
 decomposePar -allRegions
-mpirun -np 4 chtMultiRegionFoam -parallel
+mpirun -np $NPROCS chtMultiRegionFoam -parallel

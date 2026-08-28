@@ -6,3 +6,6 @@ log.*
 /meshes/
 **/cellToRegion
 slurm*
+**/processor*
+**/postProcessing
+**/sys_params

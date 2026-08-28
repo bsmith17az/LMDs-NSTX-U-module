@@ -14,7 +14,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-numberOfSubdomains 4; //number of partitions. Make sure the same number is used in the decomposeParDict file in earch region's folder
+#include "../constant/sys_params"
+
+numberOfSubdomains $NPROCS; //number of partitions. Make sure the same number is used in the decomposeParDict file in earch region's folder
 
 method          scotch;
 

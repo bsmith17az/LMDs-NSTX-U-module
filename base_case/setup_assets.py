@@ -18,7 +18,7 @@ def main():
     PROJECT_ASSETS = os.path.join(ASSET_ROOT, "LMD_modelling/NSTX-U Module")
 
     with open("constant/assets.yaml", 'r') as f:
-        assets = yaml.load(f, Loader=yaml.FullLoader)
+        assets = yaml.safe_load(f)
 
     created_links = []
     # Create symlinks for each component

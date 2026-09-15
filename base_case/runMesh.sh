@@ -1,7 +1,6 @@
 #!/bin/bash
-python3 -c "from assets import validate_assets; validate_assets()"
-
 set -eou pipefail
+python3 -c "from assets import validate_assets; validate_assets()"
 NPROCS=$(foamDictionary constant/sys_params -entry NPROCS -value)
 
 rm -rf constant/polyMesh constant/*/polyMesh dynamicCode 0/cellToRegion processor* constant/cellToRegion

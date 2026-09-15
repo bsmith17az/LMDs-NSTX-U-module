@@ -16,7 +16,7 @@ def load_assets():
     if not asset_root:
         raise RuntimeError("ASSET_ROOT is not set.")
 
-    project_assets = Path(asset_root) / "LMD_modelling/NSTX-U Module"
+    project_assets = Path(asset_root) / "lmd_modelling/nstxu_module"
 
     with open("constant/assets.yaml", "r") as f:
         assets = yaml.safe_load(f)

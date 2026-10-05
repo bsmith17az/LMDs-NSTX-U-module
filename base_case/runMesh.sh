@@ -3,7 +3,7 @@ set -eou pipefail
 python3 -c "from assets import validate_assets; validate_assets()"
 NPROCS=$(foamDictionary constant/sys_params -entry NPROCS -value)
 
-rm -rf constant/polyMesh constant/*/polyMesh dynamicCode 0/cellToRegion processor* constant/cellToRegion
+rm -rf constant/polyMesh constant/*/polyMesh dynamicCode 0/cellToRegion processor* constant/cellToRegion log.*
 blockMesh -dict system/blockMeshDict 2>&1 | tee log.blockMesh
 decomposePar 2>&1 | tee log.decomposePar
 mpirun -np $NPROCS snappyHexMesh -parallel -overwrite 2>&1 | tee log.snappyHexMesh

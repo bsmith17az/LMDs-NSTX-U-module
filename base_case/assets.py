@@ -24,7 +24,7 @@ def project_assets_dir():
     asset_root = os.environ.get("ASSET_ROOT")
     if not asset_root:
         raise AssetError("ASSET_ROOT is not set.")
-    return Path(asset_root) / "lmdmodelling/nstxumodule"
+    return Path(asset_root) / "lmd_modelling/nstxu_module"
 
 
 def validate_sources():

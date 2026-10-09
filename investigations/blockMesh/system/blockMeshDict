@@ -26,17 +26,9 @@ FoamFile
 // Coordinates are in metres.
 scale   1;
 
-// Cells in x
-nxA     2;      // x = 0     to 0.010
-nxB     2;      // x = 0.010 to 0.018
-
-// Module bottom band (z = -0.025 to -0.02): cells and grading
-// ERz = last cell / first cell, measured towards the lm_cps interface (<1 gives fine cells there)
-nzB     6;
-ERz     0.25;
-
-// Cell counts along every lm_cps/module interface edge are fixed by the lm_cps blocks.
-// If you change a count on an lm_cps block, change the module block(s) that touch it too.
+// Every block is a single cell (1 1 1). This is a background mesh for
+// snappyHexMesh castellation: block boundaries carry the geometry, the
+// zones (lm_cps, module) are cellZones that refinement keeps.
 
 vertices
 (
@@ -150,109 +142,109 @@ vertices
 
 );
 
-// Cell counts are (n1 n2 n3). n3 is always the extrusion direction (x).
+// Cell counts are (n1 n2 n3); n3 is the extrusion direction (x).
 blocks
 (
 
     // ======== zone lm_cps ========
     // B0 corner of vertical channel
-    hex (0 1 5 4 34 35 39 38)  lm_cps  (2 2 $nxA)  simpleGrading (1 1 1)
+    hex (0 1 5 4 34 35 39 38)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B1 thin bottom channel
-    hex (1 2 6 5 35 36 40 39)  lm_cps  (10 2 $nxA)  simpleGrading (1 1 1)
+    hex (1 2 6 5 35 36 40 39)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B2 thin bottom layer
-    hex (2 3 7 6 36 37 41 40)  lm_cps  (10 2 $nxA)  simpleGrading (1 1 1)
+    hex (2 3 7 6 36 37 41 40)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B3 vertical channel
-    hex (4 5 12 11 38 39 46 45)  lm_cps  (2 10 $nxA)  simpleGrading (1 1 1)
+    hex (4 5 12 11 38 39 46 45)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B4 slanted channel
-    hex (11 12 14 13 45 46 48 47)  lm_cps  (2 10 $nxA)  simpleGrading (1 1 1)
+    hex (11 12 14 13 45 46 48 47)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B5 strip above channel mouth
-    hex (13 14 20 19 47 48 54 53)  lm_cps  (2 2 $nxA)  simpleGrading (1 1 1)
+    hex (13 14 20 19 47 48 54 53)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B6 strip left
-    hex (15 13 19 17 49 47 53 51)  lm_cps  (10 2 $nxA)  simpleGrading (1 1 1)
+    hex (15 13 19 17 49 47 53 51)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B7 strip right
-    hex (14 16 18 20 48 50 52 54)  lm_cps  (10 2 $nxA)  simpleGrading (1 1 1)
+    hex (14 16 18 20 48 50 52 54)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B8 reservoir lower
-    hex (6 7 8 21 40 41 42 55)  lm_cps  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (6 7 8 21 40 41 42 55)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B9 reservoir upper
-    hex (21 8 9 10 55 42 43 44)  lm_cps  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (21 8 9 10 55 42 43 44)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B5 strip above channel mouth (x 0.01 to 0.018)
-    hex (47 48 54 53 81 82 88 87)  lm_cps  (2 2 $nxB)  simpleGrading (1 1 1)
+    hex (47 48 54 53 81 82 88 87)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B6 strip left (x 0.01 to 0.018)
-    hex (49 47 53 51 83 81 87 85)  lm_cps  (10 2 $nxB)  simpleGrading (1 1 1)
+    hex (49 47 53 51 83 81 87 85)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
     // B7 strip right (x 0.01 to 0.018)
-    hex (48 50 52 54 82 84 86 88)  lm_cps  (10 2 $nxB)  simpleGrading (1 1 1)
+    hex (48 50 52 54 82 84 86 88)  lm_cps  (1 1 1)  simpleGrading (1 1 1)
 
     // ======== zone module ========
     // LA  left, under strip
-    hex (25 11 13 15 59 45 47 49)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (25 11 13 15 59 45 47 49)  module  (1 1 1)  simpleGrading (1 1 1)
     // LB1 left, beside vertical channel
-    hex (30 4 11 25 64 38 45 59)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (30 4 11 25 64 38 45 59)  module  (1 1 1)  simpleGrading (1 1 1)
     // LB2 left, thin slab at corner block
-    hex (31 0 4 30 65 34 38 64)  module  (10 2 $nxA)  simpleGrading (1 1 1)
+    hex (31 0 4 30 65 34 38 64)  module  (1 1 1)  simpleGrading (1 1 1)
     // LB3 left, bottom band
-    hex (24 26 0 31 58 60 34 65)  module  (10 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (24 26 0 31 58 60 34 65)  module  (1 1 1)  simpleGrading (1 1 1)
     // BB0 bottom band under B0
-    hex (26 27 1 0 60 61 35 34)  module  (2 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (26 27 1 0 60 61 35 34)  module  (1 1 1)  simpleGrading (1 1 1)
     // BB1 bottom band under B1
-    hex (27 28 2 1 61 62 36 35)  module  (10 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (27 28 2 1 61 62 36 35)  module  (1 1 1)  simpleGrading (1 1 1)
     // BB2 bottom band under B2
-    hex (28 29 3 2 62 63 37 36)  module  (10 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (28 29 3 2 62 63 37 36)  module  (1 1 1)  simpleGrading (1 1 1)
     // RB3 right, bottom band
-    hex (29 23 32 3 63 57 66 37)  module  (10 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (29 23 32 3 63 57 66 37)  module  (1 1 1)  simpleGrading (1 1 1)
     // RB2 right, thin slab at reservoir end
-    hex (3 32 33 7 37 66 67 41)  module  (10 2 $nxA)  simpleGrading (1 1 1)
+    hex (3 32 33 7 37 66 67 41)  module  (1 1 1)  simpleGrading (1 1 1)
     // RB1 right, beside reservoir end
-    hex (7 33 22 8 41 67 56 42)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (7 33 22 8 41 67 56 42)  module  (1 1 1)  simpleGrading (1 1 1)
     // UR1 above reservoir, under strip
-    hex (10 9 16 14 44 43 50 48)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (10 9 16 14 44 43 50 48)  module  (1 1 1)  simpleGrading (1 1 1)
     // UR2 right of reservoir, under strip
-    hex (8 22 16 9 42 56 50 43)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (8 22 16 9 42 56 50 43)  module  (1 1 1)  simpleGrading (1 1 1)
     // QA  beside sliver
-    hex (5 6 21 12 39 40 55 46)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (5 6 21 12 39 40 55 46)  module  (1 1 1)  simpleGrading (1 1 1)
     // QB  beside slanted channel
-    hex (12 21 10 14 46 55 44 48)  module  (10 10 $nxA)  simpleGrading (1 1 1)
+    hex (12 21 10 14 46 55 44 48)  module  (1 1 1)  simpleGrading (1 1 1)
     // LA  left, under strip (x 0.01 to 0.018)
-    hex (59 45 47 49 93 79 81 83)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (59 45 47 49 93 79 81 83)  module  (1 1 1)  simpleGrading (1 1 1)
     // LB1 left, beside vertical channel (x 0.01 to 0.018)
-    hex (64 38 45 59 98 72 79 93)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (64 38 45 59 98 72 79 93)  module  (1 1 1)  simpleGrading (1 1 1)
     // LB2 left, thin slab at corner block (x 0.01 to 0.018)
-    hex (65 34 38 64 99 68 72 98)  module  (10 2 $nxB)  simpleGrading (1 1 1)
+    hex (65 34 38 64 99 68 72 98)  module  (1 1 1)  simpleGrading (1 1 1)
     // LB3 left, bottom band (x 0.01 to 0.018)
-    hex (58 60 34 65 92 94 68 99)  module  (10 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (58 60 34 65 92 94 68 99)  module  (1 1 1)  simpleGrading (1 1 1)
     // BB0 bottom band under B0 (x 0.01 to 0.018)
-    hex (60 61 35 34 94 95 69 68)  module  (2 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (60 61 35 34 94 95 69 68)  module  (1 1 1)  simpleGrading (1 1 1)
     // BB1 bottom band under B1 (x 0.01 to 0.018)
-    hex (61 62 36 35 95 96 70 69)  module  (10 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (61 62 36 35 95 96 70 69)  module  (1 1 1)  simpleGrading (1 1 1)
     // BB2 bottom band under B2 (x 0.01 to 0.018)
-    hex (62 63 37 36 96 97 71 70)  module  (10 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (62 63 37 36 96 97 71 70)  module  (1 1 1)  simpleGrading (1 1 1)
     // RB3 right, bottom band (x 0.01 to 0.018)
-    hex (63 57 66 37 97 91 100 71)  module  (10 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (63 57 66 37 97 91 100 71)  module  (1 1 1)  simpleGrading (1 1 1)
     // RB2 right, thin slab at reservoir end (x 0.01 to 0.018)
-    hex (37 66 67 41 71 100 101 75)  module  (10 2 $nxB)  simpleGrading (1 1 1)
+    hex (37 66 67 41 71 100 101 75)  module  (1 1 1)  simpleGrading (1 1 1)
     // RB1 right, beside reservoir end (x 0.01 to 0.018)
-    hex (41 67 56 42 75 101 90 76)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (41 67 56 42 75 101 90 76)  module  (1 1 1)  simpleGrading (1 1 1)
     // UR1 above reservoir, under strip (x 0.01 to 0.018)
-    hex (44 43 50 48 78 77 84 82)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (44 43 50 48 78 77 84 82)  module  (1 1 1)  simpleGrading (1 1 1)
     // UR2 right of reservoir, under strip (x 0.01 to 0.018)
-    hex (42 56 50 43 76 90 84 77)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (42 56 50 43 76 90 84 77)  module  (1 1 1)  simpleGrading (1 1 1)
     // QA  beside sliver (x 0.01 to 0.018)
-    hex (39 40 55 46 73 74 89 80)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (39 40 55 46 73 74 89 80)  module  (1 1 1)  simpleGrading (1 1 1)
     // QB  beside slanted channel (x 0.01 to 0.018)
-    hex (46 55 44 48 80 89 78 82)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (46 55 44 48 80 89 78 82)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B0 corner of vertical channel
-    hex (34 35 39 38 68 69 73 72)  module  (2 2 $nxB)  simpleGrading (1 1 1)
+    hex (34 35 39 38 68 69 73 72)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B1 thin bottom channel
-    hex (35 36 40 39 69 70 74 73)  module  (10 2 $nxB)  simpleGrading (1 1 1)
+    hex (35 36 40 39 69 70 74 73)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B2 thin bottom layer
-    hex (36 37 41 40 70 71 75 74)  module  (10 2 $nxB)  simpleGrading (1 1 1)
+    hex (36 37 41 40 70 71 75 74)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B3 vertical channel
-    hex (38 39 46 45 72 73 80 79)  module  (2 10 $nxB)  simpleGrading (1 1 1)
+    hex (38 39 46 45 72 73 80 79)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B4 slanted channel
-    hex (45 46 48 47 79 80 82 81)  module  (2 10 $nxB)  simpleGrading (1 1 1)
+    hex (45 46 48 47 79 80 82 81)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B8 reservoir lower
-    hex (40 41 42 55 74 75 76 89)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (40 41 42 55 74 75 76 89)  module  (1 1 1)  simpleGrading (1 1 1)
     // cap behind pocket: B9 reservoir upper
-    hex (55 42 43 44 89 76 77 78)  module  (10 10 $nxB)  simpleGrading (1 1 1)
+    hex (55 42 43 44 89 76 77 78)  module  (1 1 1)  simpleGrading (1 1 1)
 );
 
 edges

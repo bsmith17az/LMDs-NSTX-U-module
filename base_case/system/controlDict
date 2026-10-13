@@ -53,4 +53,9 @@ adjustTimeStep  yes;
 
 maxDeltaT       1;
 
+OptimisationSwitches
+{
+    fileHandler collated;
+}
+
 // ************************************************************************* //

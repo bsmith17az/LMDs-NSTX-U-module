@@ -61,7 +61,7 @@ boundaryField
     }
     holder_symmetry
     {
-        type            symmetry;
+        type            symmetryPlane;
     }
     holder_walls
     {

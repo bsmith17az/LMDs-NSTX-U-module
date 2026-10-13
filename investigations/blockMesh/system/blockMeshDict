@@ -20,11 +20,11 @@ FoamFile
 //
 //   lm_cps : strip + channel + reservoir (x = 0 to 0.010), strip only for x = 0.010 to 0.018
 //   module : solid block around the pocket (x = 0 to 0.018), including the solid
-//            behind the pocket for x = 0.010 to 0.018
+//            behind the pocket for x = 0.010 to 0.018, and the chunk (x = 0.018 to 0.026)
 //
 // The cross-section lies in the y-z plane and is extruded along +x. Coordinates are in metres.
 //
-// ---- Layout: 5 vertical strips x 6 rows ------------------------------------------
+// ---- Layout: 5 vertical strips x 8 rows ------------------------------------------
 // Six lines run from the top (z = 0) to the bottom (z = -0.025). Strip s lies between
 // line s and line s+1 (counting from the left, y < 0). Rows are the cross-lines that join
 // the vertices of the six lines; row r is the same cross-line in every strip.
@@ -40,19 +40,25 @@ FoamFile
 //   row (from the bottom)   z range
 //   0  bottom band           -0.025   to -0.02
 //   1  thin layer            -0.02    to -0.0197
-//   2  lower                 -0.0197  to the P14-P7 / W-P2 level
-//   3  middle                that level to the N4 / P4 level
-//   4  upper                 N4 / P4 level to the strip underside (z = -0.00045)
-//   5  strip layer           -0.00045 to 0
+//   2  lower                 -0.0197  to the W-P2 level (-0.013872 inside the cavity)
+//   3  chunk, lower          that level to the flat chunk top, z = -0.013
+//   4  chunk, top (thin)     -0.013   to -0.0125 (the level of the channel corners P14, P7)
+//   5  middle                -0.0125  to the N4 / P4 level
+//   6  upper                 N4 / P4 level to the strip underside (z = -0.00045)
+//   7  strip layer           -0.00045 to 0
 //
 // Because adjacent strips share the vertices on their common line, every block in a strip
 // has the same y count and every block in a row has the same z count.
+//
+// The chunk (x = 0.018 to 0.026) is rows 0 to 3 of every strip extruded further in x, so it
+// meets the x = 0.018 face of the module block for block, with no hanging nodes.
 scale   1;
 
 // ---- Cell counts -------------------------------------------------------------
 // x (extrusion direction)
 nxA     2;      // x = 0     to 0.010
 nxB     2;      // x = 0.010 to 0.018
+nxC     2;      // x = 0.018 to 0.026 (chunk)
 
 // Defaults for the wide strips and rows
 ny      10;
@@ -62,6 +68,8 @@ nz      10;
 nyC     2;      // y: width of the 0.351 mm channel
 nzL     2;      // z: height of the 0.3 mm layer along the bottom of the cavity
 nzS     2;      // z: height of the 0.45 mm strip layer
+nzC     4;      // z: row 3, from the W-P2 level to z = -0.013 (0.9 mm in the middle, 3.4 mm at the sides)
+nzT     2;      // z: row 4, z = -0.013 to -0.0125 (0.5 mm)
 
 // Cells in y, one value per strip (every block in that strip uses it)
 nyS1    $ny;    // strip 1: left module and left part of the strip layer
@@ -75,12 +83,14 @@ nzB     6;      // row 0: module bottom band
 ERz     0.25;   // row 0 grading: last cell / first cell, measured towards the thin layer (<1 gives fine cells there)
                 // row 1: nzL
 nzLow   $nz;    // row 2
-nzMid   $nz;    // row 3
-nzUp    $nz;    // row 4
-                // row 5: nzS
+                // row 3: nzC
+                // row 4: nzT
+nzMid   $nz;    // row 5
+nzUp    $nz;    // row 6
+                // row 7: nzS
 
 vertices
-(    // ---- x = 0 plane (indices 0..41) ----
+(    // ---- x = 0 plane (indices 0..53) ----
     (0 -0.03 -0.025)   //   0  M12
     (0 -0.007781 -0.025)   //   1  P15b
     (0 -0.00743 -0.025)   //   2  Qb
@@ -100,246 +110,395 @@ vertices
     (0 0.0125 -0.0197)   //  16  R
     (0 0.03 -0.0197)   //  17  RQ
     (0 -0.03 -0.016433)   //  18  M13
-    (0 -0.007781 -0.0125)   //  19  P14
-    (0 -0.00743 -0.0125)   //  20  P7
+    (0 -0.007781 -0.013872)   //  19  V5
+    (0 -0.00743 -0.013872)   //  20  V4
     (0 -0.002659 -0.013872)   //  21  W
     (0 0.0125 -0.013872)   //  22  P2
     (0 0.03 -0.016433)   //  23  M10
-    (0 -0.02304277 -0.005)   //  24  N6
-    (0 -0.00321751 -0.005)   //  25  N5
-    (0 -0.002866 -0.005)   //  26  N4
-    (0 0.001465 -0.0075)   //  27  P4
-    (0 0.008623 -0.0075)   //  28  P3
-    (0 0.024565 -0.0075)   //  29  X
-    (0 -0.020274 -0.00045)   //  30  P12
-    (0 -0.000449 -0.00045)   //  31  P13
-    (0 -0.000097 -0.00045)   //  32  P8
-    (0 0.0047879 -0.00045)   //  33  B3
-    (0 0.008623 -0.00045)   //  34  B2
-    (0 0.020274 -0.00045)   //  35  P9
-    (0 -0.02 0)   //  36  P11
-    (0 -0.000449 0)   //  37  T13
-    (0 -0.000097 0)   //  38  T8
-    (0 0.005 0)   //  39  A3
-    (0 0.008623 0)   //  40  A2
-    (0 0.02 0)   //  41  P10
+    (0 -0.027911 -0.013)   //  24  F1
+    (0 -0.007781 -0.013)   //  25  F2
+    (0 -0.00743 -0.013)   //  26  F3
+    (0 -0.00209422 -0.013)   //  27  F4
+    (0 0.01196944 -0.013)   //  28  F5
+    (0 0.027911 -0.013)   //  29  F6
+    (0 -0.02760668 -0.0125)   //  30  G1
+    (0 -0.007781 -0.0125)   //  31  P14
+    (0 -0.00743 -0.0125)   //  32  P7
+    (0 -0.00177066 -0.0125)   //  33  G4
+    (0 0.01166522 -0.0125)   //  34  G5
+    (0 0.02760668 -0.0125)   //  35  G6
+    (0 -0.02304277 -0.005)   //  36  N6
+    (0 -0.00321751 -0.005)   //  37  N5
+    (0 -0.002866 -0.005)   //  38  N4
+    (0 0.001465 -0.0075)   //  39  P4
+    (0 0.008623 -0.0075)   //  40  P3
+    (0 0.024565 -0.0075)   //  41  X
+    (0 -0.020274 -0.00045)   //  42  P12
+    (0 -0.000449 -0.00045)   //  43  P13
+    (0 -0.000097 -0.00045)   //  44  P8
+    (0 0.0047879 -0.00045)   //  45  B3
+    (0 0.008623 -0.00045)   //  46  B2
+    (0 0.020274 -0.00045)   //  47  P9
+    (0 -0.02 0)   //  48  P11
+    (0 -0.000449 0)   //  49  T13
+    (0 -0.000097 0)   //  50  T8
+    (0 0.005 0)   //  51  A3
+    (0 0.008623 0)   //  52  A2
+    (0 0.02 0)   //  53  P10
 
-    // ---- x = 0.01 plane (indices 42..83) ----
-    (0.01 -0.03 -0.025)   //  42  M12
-    (0.01 -0.007781 -0.025)   //  43  P15b
-    (0.01 -0.00743 -0.025)   //  44  Qb
-    (0.01 -0.00643 -0.025)   //  45  Sb
-    (0.01 0.0125 -0.025)   //  46  P1b
-    (0.01 0.03 -0.025)   //  47  M11
-    (0.01 -0.03 -0.02)   //  48  LP
-    (0.01 -0.007781 -0.02)   //  49  P15
-    (0.01 -0.00743 -0.02)   //  50  Q
-    (0.01 -0.00643 -0.02)   //  51  S
-    (0.01 0.0125 -0.02)   //  52  P1
-    (0.01 0.03 -0.02)   //  53  RP
-    (0.01 -0.03 -0.0197)   //  54  LC
-    (0.01 -0.007781 -0.0197)   //  55  C
-    (0.01 -0.00743 -0.0197)   //  56  P6
-    (0.01 -0.00643 -0.0197)   //  57  P5
-    (0.01 0.0125 -0.0197)   //  58  R
-    (0.01 0.03 -0.0197)   //  59  RQ
-    (0.01 -0.03 -0.016433)   //  60  M13
-    (0.01 -0.007781 -0.0125)   //  61  P14
-    (0.01 -0.00743 -0.0125)   //  62  P7
-    (0.01 -0.002659 -0.013872)   //  63  W
-    (0.01 0.0125 -0.013872)   //  64  P2
-    (0.01 0.03 -0.016433)   //  65  M10
-    (0.01 -0.02304277 -0.005)   //  66  N6
-    (0.01 -0.00321751 -0.005)   //  67  N5
-    (0.01 -0.002866 -0.005)   //  68  N4
-    (0.01 0.001465 -0.0075)   //  69  P4
-    (0.01 0.008623 -0.0075)   //  70  P3
-    (0.01 0.024565 -0.0075)   //  71  X
-    (0.01 -0.020274 -0.00045)   //  72  P12
-    (0.01 -0.000449 -0.00045)   //  73  P13
-    (0.01 -0.000097 -0.00045)   //  74  P8
-    (0.01 0.0047879 -0.00045)   //  75  B3
-    (0.01 0.008623 -0.00045)   //  76  B2
-    (0.01 0.020274 -0.00045)   //  77  P9
-    (0.01 -0.02 0)   //  78  P11
-    (0.01 -0.000449 0)   //  79  T13
-    (0.01 -0.000097 0)   //  80  T8
-    (0.01 0.005 0)   //  81  A3
-    (0.01 0.008623 0)   //  82  A2
-    (0.01 0.02 0)   //  83  P10
+    // ---- x = 0.01 plane (indices 54..107) ----
+    (0.01 -0.03 -0.025)   //  54  M12
+    (0.01 -0.007781 -0.025)   //  55  P15b
+    (0.01 -0.00743 -0.025)   //  56  Qb
+    (0.01 -0.00643 -0.025)   //  57  Sb
+    (0.01 0.0125 -0.025)   //  58  P1b
+    (0.01 0.03 -0.025)   //  59  M11
+    (0.01 -0.03 -0.02)   //  60  LP
+    (0.01 -0.007781 -0.02)   //  61  P15
+    (0.01 -0.00743 -0.02)   //  62  Q
+    (0.01 -0.00643 -0.02)   //  63  S
+    (0.01 0.0125 -0.02)   //  64  P1
+    (0.01 0.03 -0.02)   //  65  RP
+    (0.01 -0.03 -0.0197)   //  66  LC
+    (0.01 -0.007781 -0.0197)   //  67  C
+    (0.01 -0.00743 -0.0197)   //  68  P6
+    (0.01 -0.00643 -0.0197)   //  69  P5
+    (0.01 0.0125 -0.0197)   //  70  R
+    (0.01 0.03 -0.0197)   //  71  RQ
+    (0.01 -0.03 -0.016433)   //  72  M13
+    (0.01 -0.007781 -0.013872)   //  73  V5
+    (0.01 -0.00743 -0.013872)   //  74  V4
+    (0.01 -0.002659 -0.013872)   //  75  W
+    (0.01 0.0125 -0.013872)   //  76  P2
+    (0.01 0.03 -0.016433)   //  77  M10
+    (0.01 -0.027911 -0.013)   //  78  F1
+    (0.01 -0.007781 -0.013)   //  79  F2
+    (0.01 -0.00743 -0.013)   //  80  F3
+    (0.01 -0.00209422 -0.013)   //  81  F4
+    (0.01 0.01196944 -0.013)   //  82  F5
+    (0.01 0.027911 -0.013)   //  83  F6
+    (0.01 -0.02760668 -0.0125)   //  84  G1
+    (0.01 -0.007781 -0.0125)   //  85  P14
+    (0.01 -0.00743 -0.0125)   //  86  P7
+    (0.01 -0.00177066 -0.0125)   //  87  G4
+    (0.01 0.01166522 -0.0125)   //  88  G5
+    (0.01 0.02760668 -0.0125)   //  89  G6
+    (0.01 -0.02304277 -0.005)   //  90  N6
+    (0.01 -0.00321751 -0.005)   //  91  N5
+    (0.01 -0.002866 -0.005)   //  92  N4
+    (0.01 0.001465 -0.0075)   //  93  P4
+    (0.01 0.008623 -0.0075)   //  94  P3
+    (0.01 0.024565 -0.0075)   //  95  X
+    (0.01 -0.020274 -0.00045)   //  96  P12
+    (0.01 -0.000449 -0.00045)   //  97  P13
+    (0.01 -0.000097 -0.00045)   //  98  P8
+    (0.01 0.0047879 -0.00045)   //  99  B3
+    (0.01 0.008623 -0.00045)   // 100  B2
+    (0.01 0.020274 -0.00045)   // 101  P9
+    (0.01 -0.02 0)   // 102  P11
+    (0.01 -0.000449 0)   // 103  T13
+    (0.01 -0.000097 0)   // 104  T8
+    (0.01 0.005 0)   // 105  A3
+    (0.01 0.008623 0)   // 106  A2
+    (0.01 0.02 0)   // 107  P10
 
-    // ---- x = 0.018 plane (indices 84..125) ----
-    (0.018 -0.03 -0.025)   //  84  M12
-    (0.018 -0.007781 -0.025)   //  85  P15b
-    (0.018 -0.00743 -0.025)   //  86  Qb
-    (0.018 -0.00643 -0.025)   //  87  Sb
-    (0.018 0.0125 -0.025)   //  88  P1b
-    (0.018 0.03 -0.025)   //  89  M11
-    (0.018 -0.03 -0.02)   //  90  LP
-    (0.018 -0.007781 -0.02)   //  91  P15
-    (0.018 -0.00743 -0.02)   //  92  Q
-    (0.018 -0.00643 -0.02)   //  93  S
-    (0.018 0.0125 -0.02)   //  94  P1
-    (0.018 0.03 -0.02)   //  95  RP
-    (0.018 -0.03 -0.0197)   //  96  LC
-    (0.018 -0.007781 -0.0197)   //  97  C
-    (0.018 -0.00743 -0.0197)   //  98  P6
-    (0.018 -0.00643 -0.0197)   //  99  P5
-    (0.018 0.0125 -0.0197)   // 100  R
-    (0.018 0.03 -0.0197)   // 101  RQ
-    (0.018 -0.03 -0.016433)   // 102  M13
-    (0.018 -0.007781 -0.0125)   // 103  P14
-    (0.018 -0.00743 -0.0125)   // 104  P7
-    (0.018 -0.002659 -0.013872)   // 105  W
-    (0.018 0.0125 -0.013872)   // 106  P2
-    (0.018 0.03 -0.016433)   // 107  M10
-    (0.018 -0.02304277 -0.005)   // 108  N6
-    (0.018 -0.00321751 -0.005)   // 109  N5
-    (0.018 -0.002866 -0.005)   // 110  N4
-    (0.018 0.001465 -0.0075)   // 111  P4
-    (0.018 0.008623 -0.0075)   // 112  P3
-    (0.018 0.024565 -0.0075)   // 113  X
-    (0.018 -0.020274 -0.00045)   // 114  P12
-    (0.018 -0.000449 -0.00045)   // 115  P13
-    (0.018 -0.000097 -0.00045)   // 116  P8
-    (0.018 0.0047879 -0.00045)   // 117  B3
-    (0.018 0.008623 -0.00045)   // 118  B2
-    (0.018 0.020274 -0.00045)   // 119  P9
-    (0.018 -0.02 0)   // 120  P11
-    (0.018 -0.000449 0)   // 121  T13
-    (0.018 -0.000097 0)   // 122  T8
-    (0.018 0.005 0)   // 123  A3
-    (0.018 0.008623 0)   // 124  A2
-    (0.018 0.02 0)   // 125  P10
+    // ---- x = 0.018 plane (indices 108..161) ----
+    (0.018 -0.03 -0.025)   // 108  M12
+    (0.018 -0.007781 -0.025)   // 109  P15b
+    (0.018 -0.00743 -0.025)   // 110  Qb
+    (0.018 -0.00643 -0.025)   // 111  Sb
+    (0.018 0.0125 -0.025)   // 112  P1b
+    (0.018 0.03 -0.025)   // 113  M11
+    (0.018 -0.03 -0.02)   // 114  LP
+    (0.018 -0.007781 -0.02)   // 115  P15
+    (0.018 -0.00743 -0.02)   // 116  Q
+    (0.018 -0.00643 -0.02)   // 117  S
+    (0.018 0.0125 -0.02)   // 118  P1
+    (0.018 0.03 -0.02)   // 119  RP
+    (0.018 -0.03 -0.0197)   // 120  LC
+    (0.018 -0.007781 -0.0197)   // 121  C
+    (0.018 -0.00743 -0.0197)   // 122  P6
+    (0.018 -0.00643 -0.0197)   // 123  P5
+    (0.018 0.0125 -0.0197)   // 124  R
+    (0.018 0.03 -0.0197)   // 125  RQ
+    (0.018 -0.03 -0.016433)   // 126  M13
+    (0.018 -0.007781 -0.013872)   // 127  V5
+    (0.018 -0.00743 -0.013872)   // 128  V4
+    (0.018 -0.002659 -0.013872)   // 129  W
+    (0.018 0.0125 -0.013872)   // 130  P2
+    (0.018 0.03 -0.016433)   // 131  M10
+    (0.018 -0.027911 -0.013)   // 132  F1
+    (0.018 -0.007781 -0.013)   // 133  F2
+    (0.018 -0.00743 -0.013)   // 134  F3
+    (0.018 -0.00209422 -0.013)   // 135  F4
+    (0.018 0.01196944 -0.013)   // 136  F5
+    (0.018 0.027911 -0.013)   // 137  F6
+    (0.018 -0.02760668 -0.0125)   // 138  G1
+    (0.018 -0.007781 -0.0125)   // 139  P14
+    (0.018 -0.00743 -0.0125)   // 140  P7
+    (0.018 -0.00177066 -0.0125)   // 141  G4
+    (0.018 0.01166522 -0.0125)   // 142  G5
+    (0.018 0.02760668 -0.0125)   // 143  G6
+    (0.018 -0.02304277 -0.005)   // 144  N6
+    (0.018 -0.00321751 -0.005)   // 145  N5
+    (0.018 -0.002866 -0.005)   // 146  N4
+    (0.018 0.001465 -0.0075)   // 147  P4
+    (0.018 0.008623 -0.0075)   // 148  P3
+    (0.018 0.024565 -0.0075)   // 149  X
+    (0.018 -0.020274 -0.00045)   // 150  P12
+    (0.018 -0.000449 -0.00045)   // 151  P13
+    (0.018 -0.000097 -0.00045)   // 152  P8
+    (0.018 0.0047879 -0.00045)   // 153  B3
+    (0.018 0.008623 -0.00045)   // 154  B2
+    (0.018 0.020274 -0.00045)   // 155  P9
+    (0.018 -0.02 0)   // 156  P11
+    (0.018 -0.000449 0)   // 157  T13
+    (0.018 -0.000097 0)   // 158  T8
+    (0.018 0.005 0)   // 159  A3
+    (0.018 0.008623 0)   // 160  A2
+    (0.018 0.02 0)   // 161  P10
+
+    // ---- x = 0.026 plane (indices 162..191) (rows 0 to 4 only) ----
+    (0.026 -0.03 -0.025)   // 162  M12
+    (0.026 -0.007781 -0.025)   // 163  P15b
+    (0.026 -0.00743 -0.025)   // 164  Qb
+    (0.026 -0.00643 -0.025)   // 165  Sb
+    (0.026 0.0125 -0.025)   // 166  P1b
+    (0.026 0.03 -0.025)   // 167  M11
+    (0.026 -0.03 -0.02)   // 168  LP
+    (0.026 -0.007781 -0.02)   // 169  P15
+    (0.026 -0.00743 -0.02)   // 170  Q
+    (0.026 -0.00643 -0.02)   // 171  S
+    (0.026 0.0125 -0.02)   // 172  P1
+    (0.026 0.03 -0.02)   // 173  RP
+    (0.026 -0.03 -0.0197)   // 174  LC
+    (0.026 -0.007781 -0.0197)   // 175  C
+    (0.026 -0.00743 -0.0197)   // 176  P6
+    (0.026 -0.00643 -0.0197)   // 177  P5
+    (0.026 0.0125 -0.0197)   // 178  R
+    (0.026 0.03 -0.0197)   // 179  RQ
+    (0.026 -0.03 -0.016433)   // 180  M13
+    (0.026 -0.007781 -0.013872)   // 181  V5
+    (0.026 -0.00743 -0.013872)   // 182  V4
+    (0.026 -0.002659 -0.013872)   // 183  W
+    (0.026 0.0125 -0.013872)   // 184  P2
+    (0.026 0.03 -0.016433)   // 185  M10
+    (0.026 -0.027911 -0.013)   // 186  F1
+    (0.026 -0.007781 -0.013)   // 187  F2
+    (0.026 -0.00743 -0.013)   // 188  F3
+    (0.026 -0.00209422 -0.013)   // 189  F4
+    (0.026 0.01196944 -0.013)   // 190  F5
+    (0.026 0.027911 -0.013)   // 191  F6
 );
 
 // Cell counts are (n1 n2 n3): n1 along y, n2 along z, n3 along x (the order of the vertex list in each block).
 blocks
 (
     // ======== zone lm_cps, x = 0 to 0.010 ========
-    // strip 1, row 5: strip layer
-    hex (30 31 37 36 72 73 79 78)  lm_cps  ($nyS1 $nzS $nxA)  simpleGrading (1 1 1)
+    // strip 1, row 7: strip layer
+    hex (42 43 49 48 96 97 103 102)  lm_cps  ($nyS1 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 2, row 1: corner of vertical channel
-    hex (7 8 14 13 49 50 56 55)  lm_cps  ($nyS2 $nzL $nxA)  simpleGrading (1 1 1)
+    hex (7 8 14 13 61 62 68 67)  lm_cps  ($nyS2 $nzL $nxA)  simpleGrading (1 1 1)
     // strip 2, row 2: vertical channel
-    hex (13 14 20 19 55 56 62 61)  lm_cps  ($nyS2 $nzLow $nxA)  simpleGrading (1 1 1)
-    // strip 2, row 3: slanted channel, lower
-    hex (19 20 26 25 61 62 68 67)  lm_cps  ($nyS2 $nzMid $nxA)  simpleGrading (1 1 1)
-    // strip 2, row 4: slanted channel, upper
-    hex (25 26 32 31 67 68 74 73)  lm_cps  ($nyS2 $nzUp $nxA)  simpleGrading (1 1 1)
-    // strip 2, row 5: strip layer
-    hex (31 32 38 37 73 74 80 79)  lm_cps  ($nyS2 $nzS $nxA)  simpleGrading (1 1 1)
+    hex (13 14 20 19 67 68 74 73)  lm_cps  ($nyS2 $nzLow $nxA)  simpleGrading (1 1 1)
+    // strip 2, row 3: vertical channel
+    hex (19 20 26 25 73 74 80 79)  lm_cps  ($nyS2 $nzC $nxA)  simpleGrading (1 1 1)
+    // strip 2, row 4: vertical channel
+    hex (25 26 32 31 79 80 86 85)  lm_cps  ($nyS2 $nzT $nxA)  simpleGrading (1 1 1)
+    // strip 2, row 5: slanted channel, lower
+    hex (31 32 38 37 85 86 92 91)  lm_cps  ($nyS2 $nzMid $nxA)  simpleGrading (1 1 1)
+    // strip 2, row 6: slanted channel, upper
+    hex (37 38 44 43 91 92 98 97)  lm_cps  ($nyS2 $nzUp $nxA)  simpleGrading (1 1 1)
+    // strip 2, row 7: strip layer
+    hex (43 44 50 49 97 98 104 103)  lm_cps  ($nyS2 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 3, row 1: thin bottom channel
-    hex (8 9 15 14 50 51 57 56)  lm_cps  ($nyS3 $nzL $nxA)  simpleGrading (1 1 1)
-    // strip 3, row 5: strip layer
-    hex (32 33 39 38 74 75 81 80)  lm_cps  ($nyS3 $nzS $nxA)  simpleGrading (1 1 1)
+    hex (8 9 15 14 62 63 69 68)  lm_cps  ($nyS3 $nzL $nxA)  simpleGrading (1 1 1)
+    // strip 3, row 7: strip layer
+    hex (44 45 51 50 98 99 105 104)  lm_cps  ($nyS3 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 4, row 1: thin bottom layer
-    hex (9 10 16 15 51 52 58 57)  lm_cps  ($nyS4 $nzL $nxA)  simpleGrading (1 1 1)
+    hex (9 10 16 15 63 64 70 69)  lm_cps  ($nyS4 $nzL $nxA)  simpleGrading (1 1 1)
     // strip 4, row 2: reservoir lower
-    hex (15 16 22 21 57 58 64 63)  lm_cps  ($nyS4 $nzLow $nxA)  simpleGrading (1 1 1)
+    hex (15 16 22 21 69 70 76 75)  lm_cps  ($nyS4 $nzLow $nxA)  simpleGrading (1 1 1)
     // strip 4, row 3: reservoir upper
-    hex (21 22 28 27 63 64 70 69)  lm_cps  ($nyS4 $nzMid $nxA)  simpleGrading (1 1 1)
-    // strip 4, row 5: strip layer
-    hex (33 34 40 39 75 76 82 81)  lm_cps  ($nyS4 $nzS $nxA)  simpleGrading (1 1 1)
-    // strip 5, row 5: strip layer
-    hex (34 35 41 40 76 77 83 82)  lm_cps  ($nyS5 $nzS $nxA)  simpleGrading (1 1 1)
+    hex (21 22 28 27 75 76 82 81)  lm_cps  ($nyS4 $nzC $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 4: reservoir upper
+    hex (27 28 34 33 81 82 88 87)  lm_cps  ($nyS4 $nzT $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 5: reservoir upper
+    hex (33 34 40 39 87 88 94 93)  lm_cps  ($nyS4 $nzMid $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 7: strip layer
+    hex (45 46 52 51 99 100 106 105)  lm_cps  ($nyS4 $nzS $nxA)  simpleGrading (1 1 1)
+    // strip 5, row 7: strip layer
+    hex (46 47 53 52 100 101 107 106)  lm_cps  ($nyS5 $nzS $nxA)  simpleGrading (1 1 1)
     // ======== zone lm_cps, x = 0.010 to 0.018 (strip layer only) ========
-    // strip 1, row 5: strip layer
-    hex (72 73 79 78 114 115 121 120)  lm_cps  ($nyS1 $nzS $nxB)  simpleGrading (1 1 1)
-    // strip 2, row 5: strip layer
-    hex (73 74 80 79 115 116 122 121)  lm_cps  ($nyS2 $nzS $nxB)  simpleGrading (1 1 1)
-    // strip 3, row 5: strip layer
-    hex (74 75 81 80 116 117 123 122)  lm_cps  ($nyS3 $nzS $nxB)  simpleGrading (1 1 1)
-    // strip 4, row 5: strip layer
-    hex (75 76 82 81 117 118 124 123)  lm_cps  ($nyS4 $nzS $nxB)  simpleGrading (1 1 1)
-    // strip 5, row 5: strip layer
-    hex (76 77 83 82 118 119 125 124)  lm_cps  ($nyS5 $nzS $nxB)  simpleGrading (1 1 1)
+    // strip 1, row 7: strip layer
+    hex (96 97 103 102 150 151 157 156)  lm_cps  ($nyS1 $nzS $nxB)  simpleGrading (1 1 1)
+    // strip 2, row 7: strip layer
+    hex (97 98 104 103 151 152 158 157)  lm_cps  ($nyS2 $nzS $nxB)  simpleGrading (1 1 1)
+    // strip 3, row 7: strip layer
+    hex (98 99 105 104 152 153 159 158)  lm_cps  ($nyS3 $nzS $nxB)  simpleGrading (1 1 1)
+    // strip 4, row 7: strip layer
+    hex (99 100 106 105 153 154 160 159)  lm_cps  ($nyS4 $nzS $nxB)  simpleGrading (1 1 1)
+    // strip 5, row 7: strip layer
+    hex (100 101 107 106 154 155 161 160)  lm_cps  ($nyS5 $nzS $nxB)  simpleGrading (1 1 1)
     // ======== zone module, x = 0 to 0.010 ========
     // strip 1, row 0: left module, row bottom band
-    hex (0 1 7 6 42 43 49 48)  module  ($nyS1 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (0 1 7 6 54 55 61 60)  module  ($nyS1 $nzB $nxA)  simpleGrading (1 $ERz 1)
     // strip 1, row 1: left module, row thin layer
-    hex (6 7 13 12 48 49 55 54)  module  ($nyS1 $nzL $nxA)  simpleGrading (1 1 1)
+    hex (6 7 13 12 60 61 67 66)  module  ($nyS1 $nzL $nxA)  simpleGrading (1 1 1)
     // strip 1, row 2: left module, row lower
-    hex (12 13 19 18 54 55 61 60)  module  ($nyS1 $nzLow $nxA)  simpleGrading (1 1 1)
-    // strip 1, row 3: left module, row middle
-    hex (18 19 25 24 60 61 67 66)  module  ($nyS1 $nzMid $nxA)  simpleGrading (1 1 1)
-    // strip 1, row 4: left module, row upper
-    hex (24 25 31 30 66 67 73 72)  module  ($nyS1 $nzUp $nxA)  simpleGrading (1 1 1)
+    hex (12 13 19 18 66 67 73 72)  module  ($nyS1 $nzLow $nxA)  simpleGrading (1 1 1)
+    // strip 1, row 3: left module, row chunk, lower
+    hex (18 19 25 24 72 73 79 78)  module  ($nyS1 $nzC $nxA)  simpleGrading (1 1 1)
+    // strip 1, row 4: left module, row chunk, top (thin)
+    hex (24 25 31 30 78 79 85 84)  module  ($nyS1 $nzT $nxA)  simpleGrading (1 1 1)
+    // strip 1, row 5: left module, row middle
+    hex (30 31 37 36 84 85 91 90)  module  ($nyS1 $nzMid $nxA)  simpleGrading (1 1 1)
+    // strip 1, row 6: left module, row upper
+    hex (36 37 43 42 90 91 97 96)  module  ($nyS1 $nzUp $nxA)  simpleGrading (1 1 1)
     // strip 2, row 0: module beside channel, row bottom band
-    hex (1 2 8 7 43 44 50 49)  module  ($nyS2 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (1 2 8 7 55 56 62 61)  module  ($nyS2 $nzB $nxA)  simpleGrading (1 $ERz 1)
     // strip 3, row 0: module between channel and reservoir, row bottom band
-    hex (2 3 9 8 44 45 51 50)  module  ($nyS3 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (2 3 9 8 56 57 63 62)  module  ($nyS3 $nzB $nxA)  simpleGrading (1 $ERz 1)
     // strip 3, row 2: module between channel and reservoir, row lower
-    hex (14 15 21 20 56 57 63 62)  module  ($nyS3 $nzLow $nxA)  simpleGrading (1 1 1)
-    // strip 3, row 3: module between channel and reservoir, row middle
-    hex (20 21 27 26 62 63 69 68)  module  ($nyS3 $nzMid $nxA)  simpleGrading (1 1 1)
-    // strip 3, row 4: module between channel and reservoir, row upper
-    hex (26 27 33 32 68 69 75 74)  module  ($nyS3 $nzUp $nxA)  simpleGrading (1 1 1)
-    // strip 4, row 0: module above/below reservoir, row bottom band
-    hex (3 4 10 9 45 46 52 51)  module  ($nyS4 $nzB $nxA)  simpleGrading (1 $ERz 1)
-    // strip 4, row 4: module above/below reservoir, row upper
-    hex (27 28 34 33 69 70 76 75)  module  ($nyS4 $nzUp $nxA)  simpleGrading (1 1 1)
+    hex (14 15 21 20 68 69 75 74)  module  ($nyS3 $nzLow $nxA)  simpleGrading (1 1 1)
+    // strip 3, row 3: module between channel and reservoir, row chunk, lower
+    hex (20 21 27 26 74 75 81 80)  module  ($nyS3 $nzC $nxA)  simpleGrading (1 1 1)
+    // strip 3, row 4: module between channel and reservoir, row chunk, top (thin)
+    hex (26 27 33 32 80 81 87 86)  module  ($nyS3 $nzT $nxA)  simpleGrading (1 1 1)
+    // strip 3, row 5: module between channel and reservoir, row middle
+    hex (32 33 39 38 86 87 93 92)  module  ($nyS3 $nzMid $nxA)  simpleGrading (1 1 1)
+    // strip 3, row 6: module between channel and reservoir, row upper
+    hex (38 39 45 44 92 93 99 98)  module  ($nyS3 $nzUp $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 0: module around reservoir, row bottom band
+    hex (3 4 10 9 57 58 64 63)  module  ($nyS4 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    // strip 4, row 6: module around reservoir, row upper
+    hex (39 40 46 45 93 94 100 99)  module  ($nyS4 $nzUp $nxA)  simpleGrading (1 1 1)
     // strip 5, row 0: right module, row bottom band
-    hex (4 5 11 10 46 47 53 52)  module  ($nyS5 $nzB $nxA)  simpleGrading (1 $ERz 1)
+    hex (4 5 11 10 58 59 65 64)  module  ($nyS5 $nzB $nxA)  simpleGrading (1 $ERz 1)
     // strip 5, row 1: right module, row thin layer
-    hex (10 11 17 16 52 53 59 58)  module  ($nyS5 $nzL $nxA)  simpleGrading (1 1 1)
+    hex (10 11 17 16 64 65 71 70)  module  ($nyS5 $nzL $nxA)  simpleGrading (1 1 1)
     // strip 5, row 2: right module, row lower
-    hex (16 17 23 22 58 59 65 64)  module  ($nyS5 $nzLow $nxA)  simpleGrading (1 1 1)
-    // strip 5, row 3: right module, row middle
-    hex (22 23 29 28 64 65 71 70)  module  ($nyS5 $nzMid $nxA)  simpleGrading (1 1 1)
-    // strip 5, row 4: right module, row upper
-    hex (28 29 35 34 70 71 77 76)  module  ($nyS5 $nzUp $nxA)  simpleGrading (1 1 1)
+    hex (16 17 23 22 70 71 77 76)  module  ($nyS5 $nzLow $nxA)  simpleGrading (1 1 1)
+    // strip 5, row 3: right module, row chunk, lower
+    hex (22 23 29 28 76 77 83 82)  module  ($nyS5 $nzC $nxA)  simpleGrading (1 1 1)
+    // strip 5, row 4: right module, row chunk, top (thin)
+    hex (28 29 35 34 82 83 89 88)  module  ($nyS5 $nzT $nxA)  simpleGrading (1 1 1)
+    // strip 5, row 5: right module, row middle
+    hex (34 35 41 40 88 89 95 94)  module  ($nyS5 $nzMid $nxA)  simpleGrading (1 1 1)
+    // strip 5, row 6: right module, row upper
+    hex (40 41 47 46 94 95 101 100)  module  ($nyS5 $nzUp $nxA)  simpleGrading (1 1 1)
     // ======== zone module, x = 0.010 to 0.018 (includes the solid behind the pocket) ========
     // strip 1, row 0: left module, row bottom band
-    hex (42 43 49 48 84 85 91 90)  module  ($nyS1 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (54 55 61 60 108 109 115 114)  module  ($nyS1 $nzB $nxB)  simpleGrading (1 $ERz 1)
     // strip 1, row 1: left module, row thin layer
-    hex (48 49 55 54 90 91 97 96)  module  ($nyS1 $nzL $nxB)  simpleGrading (1 1 1)
+    hex (60 61 67 66 114 115 121 120)  module  ($nyS1 $nzL $nxB)  simpleGrading (1 1 1)
     // strip 1, row 2: left module, row lower
-    hex (54 55 61 60 96 97 103 102)  module  ($nyS1 $nzLow $nxB)  simpleGrading (1 1 1)
-    // strip 1, row 3: left module, row middle
-    hex (60 61 67 66 102 103 109 108)  module  ($nyS1 $nzMid $nxB)  simpleGrading (1 1 1)
-    // strip 1, row 4: left module, row upper
-    hex (66 67 73 72 108 109 115 114)  module  ($nyS1 $nzUp $nxB)  simpleGrading (1 1 1)
+    hex (66 67 73 72 120 121 127 126)  module  ($nyS1 $nzLow $nxB)  simpleGrading (1 1 1)
+    // strip 1, row 3: left module, row chunk, lower
+    hex (72 73 79 78 126 127 133 132)  module  ($nyS1 $nzC $nxB)  simpleGrading (1 1 1)
+    // strip 1, row 4: left module, row chunk, top (thin)
+    hex (78 79 85 84 132 133 139 138)  module  ($nyS1 $nzT $nxB)  simpleGrading (1 1 1)
+    // strip 1, row 5: left module, row middle
+    hex (84 85 91 90 138 139 145 144)  module  ($nyS1 $nzMid $nxB)  simpleGrading (1 1 1)
+    // strip 1, row 6: left module, row upper
+    hex (90 91 97 96 144 145 151 150)  module  ($nyS1 $nzUp $nxB)  simpleGrading (1 1 1)
     // strip 2, row 0: module beside channel, row bottom band
-    hex (43 44 50 49 85 86 92 91)  module  ($nyS2 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (55 56 62 61 109 110 116 115)  module  ($nyS2 $nzB $nxB)  simpleGrading (1 $ERz 1)
     // strip 2, row 1: cap behind pocket, corner of vertical channel
-    hex (49 50 56 55 91 92 98 97)  module  ($nyS2 $nzL $nxB)  simpleGrading (1 1 1)
+    hex (61 62 68 67 115 116 122 121)  module  ($nyS2 $nzL $nxB)  simpleGrading (1 1 1)
     // strip 2, row 2: cap behind pocket, vertical channel
-    hex (55 56 62 61 97 98 104 103)  module  ($nyS2 $nzLow $nxB)  simpleGrading (1 1 1)
-    // strip 2, row 3: cap behind pocket, slanted channel, lower
-    hex (61 62 68 67 103 104 110 109)  module  ($nyS2 $nzMid $nxB)  simpleGrading (1 1 1)
-    // strip 2, row 4: cap behind pocket, slanted channel, upper
-    hex (67 68 74 73 109 110 116 115)  module  ($nyS2 $nzUp $nxB)  simpleGrading (1 1 1)
+    hex (67 68 74 73 121 122 128 127)  module  ($nyS2 $nzLow $nxB)  simpleGrading (1 1 1)
+    // strip 2, row 3: cap behind pocket, vertical channel
+    hex (73 74 80 79 127 128 134 133)  module  ($nyS2 $nzC $nxB)  simpleGrading (1 1 1)
+    // strip 2, row 4: cap behind pocket, vertical channel
+    hex (79 80 86 85 133 134 140 139)  module  ($nyS2 $nzT $nxB)  simpleGrading (1 1 1)
+    // strip 2, row 5: cap behind pocket, slanted channel, lower
+    hex (85 86 92 91 139 140 146 145)  module  ($nyS2 $nzMid $nxB)  simpleGrading (1 1 1)
+    // strip 2, row 6: cap behind pocket, slanted channel, upper
+    hex (91 92 98 97 145 146 152 151)  module  ($nyS2 $nzUp $nxB)  simpleGrading (1 1 1)
     // strip 3, row 0: module between channel and reservoir, row bottom band
-    hex (44 45 51 50 86 87 93 92)  module  ($nyS3 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (56 57 63 62 110 111 117 116)  module  ($nyS3 $nzB $nxB)  simpleGrading (1 $ERz 1)
     // strip 3, row 1: cap behind pocket, thin bottom channel
-    hex (50 51 57 56 92 93 99 98)  module  ($nyS3 $nzL $nxB)  simpleGrading (1 1 1)
+    hex (62 63 69 68 116 117 123 122)  module  ($nyS3 $nzL $nxB)  simpleGrading (1 1 1)
     // strip 3, row 2: module between channel and reservoir, row lower
-    hex (56 57 63 62 98 99 105 104)  module  ($nyS3 $nzLow $nxB)  simpleGrading (1 1 1)
-    // strip 3, row 3: module between channel and reservoir, row middle
-    hex (62 63 69 68 104 105 111 110)  module  ($nyS3 $nzMid $nxB)  simpleGrading (1 1 1)
-    // strip 3, row 4: module between channel and reservoir, row upper
-    hex (68 69 75 74 110 111 117 116)  module  ($nyS3 $nzUp $nxB)  simpleGrading (1 1 1)
-    // strip 4, row 0: module above/below reservoir, row bottom band
-    hex (45 46 52 51 87 88 94 93)  module  ($nyS4 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (68 69 75 74 122 123 129 128)  module  ($nyS3 $nzLow $nxB)  simpleGrading (1 1 1)
+    // strip 3, row 3: module between channel and reservoir, row chunk, lower
+    hex (74 75 81 80 128 129 135 134)  module  ($nyS3 $nzC $nxB)  simpleGrading (1 1 1)
+    // strip 3, row 4: module between channel and reservoir, row chunk, top (thin)
+    hex (80 81 87 86 134 135 141 140)  module  ($nyS3 $nzT $nxB)  simpleGrading (1 1 1)
+    // strip 3, row 5: module between channel and reservoir, row middle
+    hex (86 87 93 92 140 141 147 146)  module  ($nyS3 $nzMid $nxB)  simpleGrading (1 1 1)
+    // strip 3, row 6: module between channel and reservoir, row upper
+    hex (92 93 99 98 146 147 153 152)  module  ($nyS3 $nzUp $nxB)  simpleGrading (1 1 1)
+    // strip 4, row 0: module around reservoir, row bottom band
+    hex (57 58 64 63 111 112 118 117)  module  ($nyS4 $nzB $nxB)  simpleGrading (1 $ERz 1)
     // strip 4, row 1: cap behind pocket, thin bottom layer
-    hex (51 52 58 57 93 94 100 99)  module  ($nyS4 $nzL $nxB)  simpleGrading (1 1 1)
+    hex (63 64 70 69 117 118 124 123)  module  ($nyS4 $nzL $nxB)  simpleGrading (1 1 1)
     // strip 4, row 2: cap behind pocket, reservoir lower
-    hex (57 58 64 63 99 100 106 105)  module  ($nyS4 $nzLow $nxB)  simpleGrading (1 1 1)
+    hex (69 70 76 75 123 124 130 129)  module  ($nyS4 $nzLow $nxB)  simpleGrading (1 1 1)
     // strip 4, row 3: cap behind pocket, reservoir upper
-    hex (63 64 70 69 105 106 112 111)  module  ($nyS4 $nzMid $nxB)  simpleGrading (1 1 1)
-    // strip 4, row 4: module above/below reservoir, row upper
-    hex (69 70 76 75 111 112 118 117)  module  ($nyS4 $nzUp $nxB)  simpleGrading (1 1 1)
+    hex (75 76 82 81 129 130 136 135)  module  ($nyS4 $nzC $nxB)  simpleGrading (1 1 1)
+    // strip 4, row 4: cap behind pocket, reservoir upper
+    hex (81 82 88 87 135 136 142 141)  module  ($nyS4 $nzT $nxB)  simpleGrading (1 1 1)
+    // strip 4, row 5: cap behind pocket, reservoir upper
+    hex (87 88 94 93 141 142 148 147)  module  ($nyS4 $nzMid $nxB)  simpleGrading (1 1 1)
+    // strip 4, row 6: module around reservoir, row upper
+    hex (93 94 100 99 147 148 154 153)  module  ($nyS4 $nzUp $nxB)  simpleGrading (1 1 1)
     // strip 5, row 0: right module, row bottom band
-    hex (46 47 53 52 88 89 95 94)  module  ($nyS5 $nzB $nxB)  simpleGrading (1 $ERz 1)
+    hex (58 59 65 64 112 113 119 118)  module  ($nyS5 $nzB $nxB)  simpleGrading (1 $ERz 1)
     // strip 5, row 1: right module, row thin layer
-    hex (52 53 59 58 94 95 101 100)  module  ($nyS5 $nzL $nxB)  simpleGrading (1 1 1)
+    hex (64 65 71 70 118 119 125 124)  module  ($nyS5 $nzL $nxB)  simpleGrading (1 1 1)
     // strip 5, row 2: right module, row lower
-    hex (58 59 65 64 100 101 107 106)  module  ($nyS5 $nzLow $nxB)  simpleGrading (1 1 1)
-    // strip 5, row 3: right module, row middle
-    hex (64 65 71 70 106 107 113 112)  module  ($nyS5 $nzMid $nxB)  simpleGrading (1 1 1)
-    // strip 5, row 4: right module, row upper
-    hex (70 71 77 76 112 113 119 118)  module  ($nyS5 $nzUp $nxB)  simpleGrading (1 1 1)
+    hex (70 71 77 76 124 125 131 130)  module  ($nyS5 $nzLow $nxB)  simpleGrading (1 1 1)
+    // strip 5, row 3: right module, row chunk, lower
+    hex (76 77 83 82 130 131 137 136)  module  ($nyS5 $nzC $nxB)  simpleGrading (1 1 1)
+    // strip 5, row 4: right module, row chunk, top (thin)
+    hex (82 83 89 88 136 137 143 142)  module  ($nyS5 $nzT $nxB)  simpleGrading (1 1 1)
+    // strip 5, row 5: right module, row middle
+    hex (88 89 95 94 142 143 149 148)  module  ($nyS5 $nzMid $nxB)  simpleGrading (1 1 1)
+    // strip 5, row 6: right module, row upper
+    hex (94 95 101 100 148 149 155 154)  module  ($nyS5 $nzUp $nxB)  simpleGrading (1 1 1)
+    // ======== zone module, x = 0.018 to 0.026 (chunk) ========
+    // strip 1, row 0: left module, row bottom band
+    hex (108 109 115 114 162 163 169 168)  module  ($nyS1 $nzB $nxC)  simpleGrading (1 $ERz 1)
+    // strip 1, row 1: left module, row thin layer
+    hex (114 115 121 120 168 169 175 174)  module  ($nyS1 $nzL $nxC)  simpleGrading (1 1 1)
+    // strip 1, row 2: left module, row lower
+    hex (120 121 127 126 174 175 181 180)  module  ($nyS1 $nzLow $nxC)  simpleGrading (1 1 1)
+    // strip 1, row 3: left module, row chunk, lower
+    hex (126 127 133 132 180 181 187 186)  module  ($nyS1 $nzC $nxC)  simpleGrading (1 1 1)
+    // strip 2, row 0: module beside channel, row bottom band
+    hex (109 110 116 115 163 164 170 169)  module  ($nyS2 $nzB $nxC)  simpleGrading (1 $ERz 1)
+    // strip 2, row 1: corner of vertical channel
+    hex (115 116 122 121 169 170 176 175)  module  ($nyS2 $nzL $nxC)  simpleGrading (1 1 1)
+    // strip 2, row 2: vertical channel
+    hex (121 122 128 127 175 176 182 181)  module  ($nyS2 $nzLow $nxC)  simpleGrading (1 1 1)
+    // strip 2, row 3: vertical channel
+    hex (127 128 134 133 181 182 188 187)  module  ($nyS2 $nzC $nxC)  simpleGrading (1 1 1)
+    // strip 3, row 0: module between channel and reservoir, row bottom band
+    hex (110 111 117 116 164 165 171 170)  module  ($nyS3 $nzB $nxC)  simpleGrading (1 $ERz 1)
+    // strip 3, row 1: thin bottom channel
+    hex (116 117 123 122 170 171 177 176)  module  ($nyS3 $nzL $nxC)  simpleGrading (1 1 1)
+    // strip 3, row 2: module between channel and reservoir, row lower
+    hex (122 123 129 128 176 177 183 182)  module  ($nyS3 $nzLow $nxC)  simpleGrading (1 1 1)
+    // strip 3, row 3: module between channel and reservoir, row chunk, lower
+    hex (128 129 135 134 182 183 189 188)  module  ($nyS3 $nzC $nxC)  simpleGrading (1 1 1)
+    // strip 4, row 0: module around reservoir, row bottom band
+    hex (111 112 118 117 165 166 172 171)  module  ($nyS4 $nzB $nxC)  simpleGrading (1 $ERz 1)
+    // strip 4, row 1: thin bottom layer
+    hex (117 118 124 123 171 172 178 177)  module  ($nyS4 $nzL $nxC)  simpleGrading (1 1 1)
+    // strip 4, row 2: reservoir lower
+    hex (123 124 130 129 177 178 184 183)  module  ($nyS4 $nzLow $nxC)  simpleGrading (1 1 1)
+    // strip 4, row 3: reservoir upper
+    hex (129 130 136 135 183 184 190 189)  module  ($nyS4 $nzC $nxC)  simpleGrading (1 1 1)
+    // strip 5, row 0: right module, row bottom band
+    hex (112 113 119 118 166 167 173 172)  module  ($nyS5 $nzB $nxC)  simpleGrading (1 $ERz 1)
+    // strip 5, row 1: right module, row thin layer
+    hex (118 119 125 124 172 173 179 178)  module  ($nyS5 $nzL $nxC)  simpleGrading (1 1 1)
+    // strip 5, row 2: right module, row lower
+    hex (124 125 131 130 178 179 185 184)  module  ($nyS5 $nzLow $nxC)  simpleGrading (1 1 1)
+    // strip 5, row 3: right module, row chunk, lower
+    hex (130 131 137 136 184 185 191 190)  module  ($nyS5 $nzC $nxC)  simpleGrading (1 1 1)
 );
 
 edges
@@ -354,16 +513,16 @@ boundary
         type patch;
         faces
         (
-            (36 78 79 37)
-            (37 79 80 38)
-            (38 80 81 39)
-            (39 81 82 40)
-            (40 82 83 41)
-            (78 120 121 79)
-            (79 121 122 80)
-            (80 122 123 81)
-            (81 123 124 82)
-            (82 124 125 83)
+            (48 102 103 49)
+            (49 103 104 50)
+            (50 104 105 51)
+            (51 105 106 52)
+            (52 106 107 53)
+            (102 156 157 103)
+            (103 157 158 104)
+            (104 158 159 105)
+            (105 159 160 106)
+            (106 160 161 107)
         );
     }
 
@@ -373,10 +532,10 @@ boundary
         type patch;
         faces
         (
-            (30 72 78 36)
-            (35 41 83 77)
-            (72 114 120 78)
-            (77 83 125 119)
+            (42 96 102 48)
+            (47 53 107 101)
+            (96 150 156 102)
+            (101 107 161 155)
         );
     }
 
@@ -386,19 +545,23 @@ boundary
         type patch;
         faces
         (
-            (30 36 37 31)
+            (42 48 49 43)
             (7 13 14 8)
             (13 19 20 14)
             (19 25 26 20)
             (25 31 32 26)
             (31 37 38 32)
+            (37 43 44 38)
+            (43 49 50 44)
             (8 14 15 9)
-            (32 38 39 33)
+            (44 50 51 45)
             (9 15 16 10)
             (15 21 22 16)
             (21 27 28 22)
+            (27 33 34 28)
             (33 39 40 34)
-            (34 40 41 35)
+            (45 51 52 46)
+            (46 52 53 47)
         );
     }
 
@@ -408,11 +571,11 @@ boundary
         type patch;
         faces
         (
-            (114 115 121 120)
-            (115 116 122 121)
-            (116 117 123 122)
-            (117 118 124 123)
-            (118 119 125 124)
+            (150 151 157 156)
+            (151 152 158 157)
+            (152 153 159 158)
+            (153 154 160 159)
+            (154 155 161 160)
         );
     }
 
@@ -427,100 +590,160 @@ boundary
             (12 18 19 13)
             (18 24 25 19)
             (24 30 31 25)
+            (30 36 37 31)
+            (36 42 43 37)
             (1 7 8 2)
             (2 8 9 3)
             (14 20 21 15)
             (20 26 27 21)
             (26 32 33 27)
+            (32 38 39 33)
+            (38 44 45 39)
             (3 9 10 4)
-            (27 33 34 28)
+            (39 45 46 40)
             (4 10 11 5)
             (10 16 17 11)
             (16 22 23 17)
             (22 28 29 23)
             (28 34 35 29)
+            (34 40 41 35)
+            (40 46 47 41)
         );
     }
 
-    // x = 0.018 face of the module
+    // x = 0.018 face of the module (the part above the chunk)
     module_xMax
     {
         type patch;
         faces
         (
-            (84 85 91 90)
-            (90 91 97 96)
-            (96 97 103 102)
-            (102 103 109 108)
-            (108 109 115 114)
-            (85 86 92 91)
-            (91 92 98 97)
-            (97 98 104 103)
-            (103 104 110 109)
-            (109 110 116 115)
-            (86 87 93 92)
-            (92 93 99 98)
-            (98 99 105 104)
-            (104 105 111 110)
-            (110 111 117 116)
-            (87 88 94 93)
-            (93 94 100 99)
-            (99 100 106 105)
-            (105 106 112 111)
-            (111 112 118 117)
-            (88 89 95 94)
-            (94 95 101 100)
-            (100 101 107 106)
-            (106 107 113 112)
-            (112 113 119 118)
+            (132 133 139 138)
+            (138 139 145 144)
+            (144 145 151 150)
+            (133 134 140 139)
+            (139 140 146 145)
+            (145 146 152 151)
+            (134 135 141 140)
+            (140 141 147 146)
+            (146 147 153 152)
+            (135 136 142 141)
+            (141 142 148 147)
+            (147 148 154 153)
+            (136 137 143 142)
+            (142 143 149 148)
+            (148 149 155 154)
         );
     }
 
-    // Module underside, z = -0.025
+    // Top of the chunk, z = -0.013
+    chunk_top
+    {
+        type wall;
+        faces
+        (
+            (132 186 187 133)
+            (133 187 188 134)
+            (134 188 189 135)
+            (135 189 190 136)
+            (136 190 191 137)
+        );
+    }
+
+    // x = 0.026 end face of the chunk
+    chunk_xMax
+    {
+        type patch;
+        faces
+        (
+            (162 163 169 168)
+            (168 169 175 174)
+            (174 175 181 180)
+            (180 181 187 186)
+            (163 164 170 169)
+            (169 170 176 175)
+            (175 176 182 181)
+            (181 182 188 187)
+            (164 165 171 170)
+            (170 171 177 176)
+            (176 177 183 182)
+            (182 183 189 188)
+            (165 166 172 171)
+            (171 172 178 177)
+            (177 178 184 183)
+            (183 184 190 189)
+            (166 167 173 172)
+            (172 173 179 178)
+            (178 179 185 184)
+            (184 185 191 190)
+        );
+    }
+
+    // Module underside, z = -0.025 (including the chunk)
     module_bottom
     {
         type wall;
         faces
         (
-            (0 1 43 42)
-            (1 2 44 43)
-            (2 3 45 44)
-            (3 4 46 45)
-            (4 5 47 46)
-            (42 43 85 84)
-            (43 44 86 85)
-            (44 45 87 86)
-            (45 46 88 87)
-            (46 47 89 88)
+            (0 1 55 54)
+            (1 2 56 55)
+            (2 3 57 56)
+            (3 4 58 57)
+            (4 5 59 58)
+            (54 55 109 108)
+            (55 56 110 109)
+            (56 57 111 110)
+            (57 58 112 111)
+            (58 59 113 112)
+            (108 109 163 162)
+            (109 110 164 163)
+            (110 111 165 164)
+            (111 112 166 165)
+            (112 113 167 166)
         );
     }
 
-    // Module flared and vertical side walls, y = +/-0.03
+    // Module flared and vertical side walls, y = +/-0.03 (including the chunk)
     module_sides
     {
         type wall;
         faces
         (
-            (0 42 48 6)
-            (6 48 54 12)
-            (12 54 60 18)
-            (18 60 66 24)
-            (24 66 72 30)
-            (5 11 53 47)
-            (11 17 59 53)
-            (17 23 65 59)
-            (23 29 71 65)
-            (29 35 77 71)
-            (42 84 90 48)
-            (48 90 96 54)
-            (54 96 102 60)
-            (60 102 108 66)
-            (66 108 114 72)
-            (47 53 95 89)
-            (53 59 101 95)
-            (59 65 107 101)
-            (65 71 113 107)
-            (71 77 119 113)
+            (0 54 60 6)
+            (6 60 66 12)
+            (12 66 72 18)
+            (18 72 78 24)
+            (24 78 84 30)
+            (30 84 90 36)
+            (36 90 96 42)
+            (5 11 65 59)
+            (11 17 71 65)
+            (17 23 77 71)
+            (23 29 83 77)
+            (29 35 89 83)
+            (35 41 95 89)
+            (41 47 101 95)
+            (54 108 114 60)
+            (60 114 120 66)
+            (66 120 126 72)
+            (72 126 132 78)
+            (78 132 138 84)
+            (84 138 144 90)
+            (90 144 150 96)
+            (59 65 119 113)
+            (65 71 125 119)
+            (71 77 131 125)
+            (77 83 137 131)
+            (83 89 143 137)
+            (89 95 149 143)
+            (95 101 155 149)
+            (108 162 168 114)
+            (114 168 174 120)
+            (120 174 180 126)
+            (126 180 186 132)
+            (113 119 173 167)
+            (119 125 179 173)
+            (125 131 185 179)
+            (131 137 191 185)
         );
     }
 

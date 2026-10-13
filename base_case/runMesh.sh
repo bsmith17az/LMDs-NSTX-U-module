@@ -1,14 +1,8 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -eou pipefail
-python3 assets.py check-links
-NPROCS=$(foamDictionary constant/sys_params -entry NPROCS -value)
 
-rm -rf constant/polyMesh constant/*/polyMesh dynamicCode 0/cellToRegion processor* constant/cellToRegion log.*
-blockMesh -dict system/blockMeshDict 2>&1 | tee log.blockMesh
-decomposePar 2>&1 | tee log.decomposePar
-mpirun -np $NPROCS snappyHexMesh -parallel -overwrite 2>&1 | tee log.snappyHexMesh
-reconstructParMesh -constant 2>&1 | tee log.reconstructParMesh
-reconstructPar -constant 2>&1 | tee log.reconstructPar
-rm -rf processor*
-splitMeshRegions -cellZones -overwrite 2>&1 | tee log.splitMeshRegions
-createPatch -overwrite -allRegions 2>&1 | tee log.createPatch
+rm -rf constant/polyMesh constant/*/polyMesh dynamicCode 0/cellToRegion processor* constant/cellToRegion postProcessing/ log.*
+blockMesh | tee log.blockMesh
+splitMeshRegions -cellZonesOnly -overwrite | tee log.splitMeshRegions
+rm -r constant/polyMesh
+checkMesh -allRegions -writeSets 'vtp' | tee log.checkMesh

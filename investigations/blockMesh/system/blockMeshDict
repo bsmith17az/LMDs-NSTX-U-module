@@ -15,10 +15,14 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 // Three regions in one conformal mesh, separated afterwards:
-//     blockMesh
-//     splitMeshRegions -cellZones -overwrite
+//     blockMesh -sets
+//     splitMeshRegions -cellZonesOnly -overwrite
 //
-//   lm_cps : strip + channel + reservoir (x = 0 to 0.010), strip only for x = 0.010 to 0.018
+//   reservoir         : the large cavity (x = 0 to 0.010)
+//   capillary_channel : vertical and slanted 0.3 mm channel plus the 0.3 mm layer along the bottom of
+//                       the cavity (x = 0 to 0.010)
+//   cps               : the 0.45 mm strip layer at the top (x = 0 to 0.018)
+//                       reservoir + capillary_channel + cps make up the lm_cps region
 //   module : solid block around the pocket (x = 0 to 0.018), including the solid
 //            behind the pocket for x = 0.010 to 0.018, and the chunk (x = 0.018 to 0.026)
 //   holder : slab under the module, z = -0.03 to -0.025, y = +/-0.03, x = 0 to 0.026
@@ -324,9 +328,16 @@ vertices
 // Cell counts are (n1 n2 n3): n1 along y, n2 along z, n3 along x (the order of the vertex list in each block).
 blocks
 (
-    // ======== zone lm_cps, x = 0 to 0.010 ========
-    // strip 1, row 7: strip layer
-    hex (42 43 49 48 96 97 103 102)  lm_cps  ($nyS1 $nzS $nxA)  simpleGrading (1 1 1)
+    // ======== zone reservoir, x = 0 to 0.010 ========
+    // strip 4, row 2: reservoir lower
+    hex (15 16 22 21 69 70 76 75)  lm_cps  ($nyS4 $nzLow $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 3: reservoir upper
+    hex (21 22 28 27 75 76 82 81)  lm_cps  ($nyS4 $nzC $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 4: reservoir upper
+    hex (27 28 34 33 81 82 88 87)  lm_cps  ($nyS4 $nzT $nxA)  simpleGrading (1 1 1)
+    // strip 4, row 5: reservoir upper
+    hex (33 34 40 39 87 88 94 93)  lm_cps  ($nyS4 $nzMid $nxA)  simpleGrading (1 1 1)
+    // ======== zone capillary_channel (vertical and slanted channel and the 0.3 mm layer along the bottom), x = 0 to 0.010 ========
     // strip 2, row 1: corner of vertical channel
     hex (7 8 14 13 61 62 68 67)  lm_cps  ($nyS2 $nzL $nxA)  simpleGrading (1 1 1)
     // strip 2, row 2: vertical channel
@@ -339,27 +350,22 @@ blocks
     hex (31 32 38 37 85 86 92 91)  lm_cps  ($nyS2 $nzMid $nxA)  simpleGrading (1 1 1)
     // strip 2, row 6: slanted channel, upper
     hex (37 38 44 43 91 92 98 97)  lm_cps  ($nyS2 $nzUp $nxA)  simpleGrading (1 1 1)
-    // strip 2, row 7: strip layer
-    hex (43 44 50 49 97 98 104 103)  lm_cps  ($nyS2 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 3, row 1: thin bottom channel
     hex (8 9 15 14 62 63 69 68)  lm_cps  ($nyS3 $nzL $nxA)  simpleGrading (1 1 1)
-    // strip 3, row 7: strip layer
-    hex (44 45 51 50 98 99 105 104)  lm_cps  ($nyS3 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 4, row 1: thin bottom layer
     hex (9 10 16 15 63 64 70 69)  lm_cps  ($nyS4 $nzL $nxA)  simpleGrading (1 1 1)
-    // strip 4, row 2: reservoir lower
-    hex (15 16 22 21 69 70 76 75)  lm_cps  ($nyS4 $nzLow $nxA)  simpleGrading (1 1 1)
-    // strip 4, row 3: reservoir upper
-    hex (21 22 28 27 75 76 82 81)  lm_cps  ($nyS4 $nzC $nxA)  simpleGrading (1 1 1)
-    // strip 4, row 4: reservoir upper
-    hex (27 28 34 33 81 82 88 87)  lm_cps  ($nyS4 $nzT $nxA)  simpleGrading (1 1 1)
-    // strip 4, row 5: reservoir upper
-    hex (33 34 40 39 87 88 94 93)  lm_cps  ($nyS4 $nzMid $nxA)  simpleGrading (1 1 1)
+    // ======== zone cps (0.45 mm strip layer at the top), x = 0 to 0.010 ========
+    // strip 1, row 7: strip layer
+    hex (42 43 49 48 96 97 103 102)  lm_cps  ($nyS1 $nzS $nxA)  simpleGrading (1 1 1)
+    // strip 2, row 7: strip layer
+    hex (43 44 50 49 97 98 104 103)  lm_cps  ($nyS2 $nzS $nxA)  simpleGrading (1 1 1)
+    // strip 3, row 7: strip layer
+    hex (44 45 51 50 98 99 105 104)  lm_cps  ($nyS3 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 4, row 7: strip layer
     hex (45 46 52 51 99 100 106 105)  lm_cps  ($nyS4 $nzS $nxA)  simpleGrading (1 1 1)
     // strip 5, row 7: strip layer
     hex (46 47 53 52 100 101 107 106)  lm_cps  ($nyS5 $nzS $nxA)  simpleGrading (1 1 1)
-    // ======== zone lm_cps, x = 0.010 to 0.018 (strip layer only) ========
+    // ======== zone cps, x = 0.010 to 0.018 ========
     // strip 1, row 7: strip layer
     hex (96 97 103 102 150 151 157 156)  lm_cps  ($nyS1 $nzS $nxB)  simpleGrading (1 1 1)
     // strip 2, row 7: strip layer
@@ -571,7 +577,7 @@ edges
 boundary
 (
     // Free surface of the liquid metal at z = 0 (lm_cps)
-    top
+    lm_cps_top
     {
         type patch;
         faces
@@ -590,7 +596,7 @@ boundary
     }
 
     // Sloped ends of the 0.45 mm strip at y = +/-0.02 (lm_cps)
-    stripEnds
+    lm_cps_external
     {
         type patch;
         faces
@@ -599,41 +605,6 @@ boundary
             (47 53 107 101)
             (96 150 156 102)
             (101 107 161 155)
-        );
-    }
-
-    // x = 0 face of lm_cps
-    lm_xMin
-    {
-        type patch;
-        faces
-        (
-            (42 48 49 43)
-            (7 13 14 8)
-            (13 19 20 14)
-            (19 25 26 20)
-            (25 31 32 26)
-            (31 37 38 32)
-            (37 43 44 38)
-            (43 49 50 44)
-            (8 14 15 9)
-            (44 50 51 45)
-            (9 15 16 10)
-            (15 21 22 16)
-            (21 27 28 22)
-            (27 33 34 28)
-            (33 39 40 34)
-            (45 51 52 46)
-            (46 52 53 47)
-        );
-    }
-
-    // x = 0.018 face of lm_cps (strip only)
-    lm_xMax
-    {
-        type patch;
-        faces
-        (
             (150 151 157 156)
             (151 152 158 157)
             (152 153 159 158)
@@ -642,10 +613,36 @@ boundary
         );
     }
 
-    // x = 0 face of the module
-    module_xMin
+    // x = 0 face of lm_cps
+    lm_cps_symmetry
     {
-        type patch;
+        type symmetryPlane;
+        faces
+        (
+            (15 21 22 16)
+            (21 27 28 22)
+            (27 33 34 28)
+            (33 39 40 34)
+            (7 13 14 8)
+            (13 19 20 14)
+            (19 25 26 20)
+            (25 31 32 26)
+            (31 37 38 32)
+            (37 43 44 38)
+            (8 14 15 9)
+            (9 15 16 10)
+            (42 48 49 43)
+            (43 49 50 44)
+            (44 50 51 45)
+            (45 51 52 46)
+            (46 52 53 47)
+        );
+    }
+
+    // x = 0 face of the module
+    module_symmetry
+    {
+        type symmetryPlane;
         faces
         (
             (0 6 7 1)
@@ -675,7 +672,7 @@ boundary
     }
 
     // x = 0.018 face of the module (the part above the chunk)
-    module_xMax
+    module_walls
     {
         type patch;
         faces
@@ -695,29 +692,11 @@ boundary
             (136 137 143 142)
             (142 143 149 148)
             (148 149 155 154)
-        );
-    }
-
-    // Top of the chunk, z = -0.013
-    chunk_top
-    {
-        type wall;
-        faces
-        (
             (132 186 187 133)
             (133 187 188 134)
             (134 188 189 135)
             (135 189 190 136)
             (136 190 191 137)
-        );
-    }
-
-    // x = 0.026 end face of the chunk
-    chunk_xMax
-    {
-        type patch;
-        faces
-        (
             (162 163 169 168)
             (168 169 175 174)
             (174 175 181 180)
@@ -738,15 +717,6 @@ boundary
             (172 173 179 178)
             (178 179 185 184)
             (184 185 191 190)
-        );
-    }
-
-    // Module flared and vertical side walls, y = +/-0.03 (including the chunk)
-    module_sides
-    {
-        type wall;
-        faces
-        (
             (0 54 60 6)
             (6 60 66 12)
             (12 66 72 18)
@@ -787,9 +757,9 @@ boundary
     }
 
     // x = 0 face of the holder
-    holder_xMin
+    holder_symmetry
     {
-        type patch;
+        type symmetryPlane;
         faces
         (
             (192 0 1 193)
@@ -801,7 +771,7 @@ boundary
     }
 
     // x = 0.026 face of the holder
-    holder_xMax
+    holder_walls
     {
         type patch;
         faces
@@ -811,6 +781,12 @@ boundary
             (212 213 165 164)
             (213 214 166 165)
             (214 215 167 166)
+            (192 198 54 0)
+            (197 5 59 203)
+            (198 204 108 54)
+            (203 59 113 209)
+            (204 210 162 108)
+            (209 113 167 215)
         );
     }
 
@@ -835,21 +811,6 @@ boundary
             (206 207 213 212)
             (207 208 214 213)
             (208 209 215 214)
-        );
-    }
-
-    // Holder side walls, y = +/-0.03
-    holder_sides
-    {
-        type wall;
-        faces
-        (
-            (192 198 54 0)
-            (197 5 59 203)
-            (198 204 108 54)
-            (203 59 113 209)
-            (204 210 162 108)
-            (209 113 167 215)
         );
     }
 

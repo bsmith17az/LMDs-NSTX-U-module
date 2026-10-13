@@ -24,7 +24,7 @@ boundaryField
 {
     module_symmetry
     {
-        type            symmetry;
+        type            symmetryPlane;
     }
     module_walls
     {

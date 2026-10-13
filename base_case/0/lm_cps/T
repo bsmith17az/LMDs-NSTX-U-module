@@ -115,7 +115,7 @@ boundaryField
     }
     ".*symmetry"
     {
-        type            symmetry;
+        type            symmetryPlane;
     }
     lm_cps_to_module
     {

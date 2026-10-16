@@ -9,3 +9,5 @@ slurm*
 **/processor*
 **/postProcessing
 **/sys_params
+**/[1-9]
+**/[1-9][0-9]
